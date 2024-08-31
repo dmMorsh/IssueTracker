@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using IssueTracker.Data;
-using IssueTracker.Models;
+using IssueTracker.Dal.Data;
+using IssueTracker.Dal.Models;
 using IssueTracker.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);

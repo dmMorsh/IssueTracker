@@ -1,4 +1,4 @@
-namespace IssueTracker.Models;
+namespace IssueTracker.Dal.Models;
 public class ExecutionList
 {
     public required Guid UserId { get; set; }

@@ -1,4 +1,4 @@
-namespace IssueTracker.Models;
+namespace IssueTracker.Dal.Models;
 public class UserMessage
 {
     public int id { get; set; }

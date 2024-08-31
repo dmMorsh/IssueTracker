@@ -1,4 +1,4 @@
-namespace IssueTracker.Models;
+namespace IssueTracker.Dal.Models;
 public class ChatEntity
 {
     public int id { get; set; }

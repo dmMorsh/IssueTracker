@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
-using IssueTracker.Data;
-using IssueTracker.Models;
+using IssueTracker.Dal.Data;
+using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Hubs;
 public class ChatHub : Hub

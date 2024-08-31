@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using IssueTracker.Models;
+using IssueTracker.Dal.Models;
 
-namespace IssueTracker.Data;
+namespace IssueTracker.Dal.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
