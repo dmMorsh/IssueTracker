@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
-using IssueTracker.Dal.Data;
+using IssueTracker.Dal.Context;
 using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Hubs;

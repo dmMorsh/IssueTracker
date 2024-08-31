@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using IssueTracker.Dal.Data;
+using IssueTracker.Dal.Context;
 using IssueTracker.Dal.Models;
 using IssueTracker.Hubs;
 

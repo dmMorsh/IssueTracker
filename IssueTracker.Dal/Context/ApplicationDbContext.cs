@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using IssueTracker.Dal.Models;
 
-namespace IssueTracker.Dal.Data;
+namespace IssueTracker.Dal.Context;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
