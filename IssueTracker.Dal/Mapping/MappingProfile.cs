@@ -1,8 +1,7 @@
 using System.Linq.Expressions;
 using AutoMapper;
-using IssueTracker.Dal.Models;
 
-namespace IssueTracker.Mapper;
+namespace IssueTracker.Dal.Models;
 
 public static class ExtensionMapping
 {
