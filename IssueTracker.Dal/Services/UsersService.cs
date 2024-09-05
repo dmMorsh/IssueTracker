@@ -7,6 +7,7 @@ namespace IssueTracker.Dal.Services;
 public class UsersService 
 {
     private readonly ApplicationDbContext _context;
+    
     public UsersService(ApplicationDbContext context)
     {
         _context = context;
@@ -22,11 +23,10 @@ public class UsersService
             })
             .OrderBy(item => item.id)
             .ToListAsync();
-
         return users;
     }
 
-    public async Task<IEnumerable<MiniUser>> findByName(string userName, int amount)
+    public async Task<IEnumerable<MiniUser>> FindByName(string userName, int amount)
     {
         var users = await _context.Users
             .Where(u => u.NormalizedUserName.StartsWith(userName.ToUpper()))
@@ -38,18 +38,19 @@ public class UsersService
                 username = x.UserName
             })
             .ToListAsync();
-
         return users;
     }
 
-    public async Task<ApplicationUser> getById(Guid userId)
+    public async Task<ApplicationUser> FindById(Guid userId)
     {
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Id == userId);
-
         return user;
     }
 
-
+    public async Task<ApplicationUser> FindById(string userId)
+    {
+        return await FindById(new Guid(userId));
+    }
 
 }

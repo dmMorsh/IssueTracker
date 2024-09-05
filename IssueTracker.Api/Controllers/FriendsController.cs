@@ -1,4 +1,4 @@
-using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using IssueTracker.Dal.Services;
@@ -12,13 +12,14 @@ public class IID
     public string id { get; set; } 
 }
     
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ServiceFilter(typeof(UserGuidFilter))]
 [ApiController]
 [Route("api/[controller]")]
 public class FriendsController : ControllerBase
 {
     private readonly FriendsService _friendsService;
-    public readonly FriendsSubscriptionsService _subscriptionsService;
+    private readonly FriendsSubscriptionsService _subscriptionsService;
 
     public FriendsController(
         FriendsService friendsService,

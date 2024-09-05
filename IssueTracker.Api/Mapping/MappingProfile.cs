@@ -42,5 +42,6 @@ public class MappingProfile : Profile
             .ForMember(dst => dst.executorId, opt => opt
                 .MapFrom(srs => srs.executor != null ? srs.executor.Id : new Guid())
                 );
+
     }
 }

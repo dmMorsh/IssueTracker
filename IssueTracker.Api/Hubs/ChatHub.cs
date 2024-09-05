@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.SignalR;
-using IssueTracker.Dal.Context;
+using IssueTracker.Dal.Services;
 using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Hubs;
 public class ChatHub : Hub
 {
-    public readonly ApplicationDbContext _context;
+    public readonly MessagesService _messagesService;
 
-    public ChatHub(ApplicationDbContext context)
+    public ChatHub(MessagesService messagesService)
     {
-        _context = context;
+        _messagesService = messagesService;
     }
 
     public async Task SendMessage(UserMessage m)
@@ -24,9 +24,8 @@ public class ChatHub : Hub
             dateSent = m.dateSent
         };
 
-        _context.messages.Add(returnMessage);
-        _context.SaveChanges();
-
+        var success = await _messagesService.Add(returnMessage);
+        if (success)
         await Clients.Group(m.chatId.ToString()).SendAsync("ReceiveMessage", returnMessage);
     }
 

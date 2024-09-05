@@ -7,6 +7,7 @@ namespace IssueTracker.Dal.Services;
 public class FriendsSubscriptionsService 
 {
     private readonly ApplicationDbContext _context;
+    
     public FriendsSubscriptionsService(ApplicationDbContext context)
     {
         _context = context;
@@ -24,7 +25,6 @@ public class FriendsSubscriptionsService
                 username = x.UserName
             })
             .ToListAsync();
-
         return subscriptions;
     }
 
@@ -40,7 +40,6 @@ public class FriendsSubscriptionsService
                 username = x.UserName
             })
             .ToListAsync();
-
         return friendRequests;
     }
 
