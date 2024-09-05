@@ -129,7 +129,7 @@ public class TicketsService
         if (ticketDto.executorId != null && ticketDto.executorId != "")
         {
             ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.executorId));
-            if (_executor == null)
+            if (_executor != null)
             ticket.executor = _executor;
         }
         ticket.creator = _creator;
@@ -153,7 +153,7 @@ public class TicketsService
         if (ticketDto.executorId != null && ticketDto.executorId != "")
         {
             ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.executorId));
-            if (_executor == null)
+            if (_executor != null)
             ticket.executor = _executor;
         }
         ticket.creator = _creator;
