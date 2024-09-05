@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using IssueTracker.Dal.Context;
 using IssueTracker.Dal.Models;
+using IssueTracker.Dal.Services;
 using IssueTracker.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +67,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
+
+//to add id of user where requared
+builder.Services.AddScoped<UserGuidFilter>();
+//to add services from dal
+var appServices = typeof(UsersService).Assembly.GetTypes()
+    .Where(s => s.Name.EndsWith("Service") && s.IsInterface == false).ToList();
+foreach (var appService in appServices)
+    builder.Services.Add(new ServiceDescriptor(appService, appService, ServiceLifetime.Scoped));
 
 var app = builder.Build();
 

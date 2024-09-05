@@ -1,5 +1,5 @@
-namespace IssueTracker.Dal.Models;
-public class LoginViewModel
+namespace IssueTracker.Dto;
+public class LoginDto
 {
     public required string Login { get; set; }
     public required string Password { get; set; }
