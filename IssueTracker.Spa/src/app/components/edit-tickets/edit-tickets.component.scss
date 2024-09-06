@@ -2,12 +2,12 @@
     height: 95vh;  
     border: 1px solid #ccc;
     padding: 10px;
-    overflow-y: auto;
     box-sizing: border-box;
   }
   
   .card-body {
     height: 100%;
+    overflow-y: auto;
   }
 
 button{
