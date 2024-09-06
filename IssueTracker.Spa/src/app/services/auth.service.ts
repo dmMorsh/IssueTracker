@@ -48,7 +48,6 @@ export class AuthService {
         .pipe(
             
             tap((res: IUser) => {
-                console.log(res)
                 this.cookieService.set('token', res.token);
                 this.cookieService.set('refreshToken', res.refreshToken);
                 localStorage.setItem('userId', res.id)
@@ -73,7 +72,6 @@ export class AuthService {
         .pipe(
 
             tap((res: IUser) => {
-                console.log(res)
                 localStorage.setItem('id', res.id.toString())
                 this.cookieService.set('token', res.token);
                 this.cookieService.set('refreshToken', res.refreshToken);

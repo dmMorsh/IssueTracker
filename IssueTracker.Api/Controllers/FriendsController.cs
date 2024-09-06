@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using IssueTracker.Dal.Services;
 using IssueTracker.Dal.Models;
+using IssueTracker.Hubs;
 
 namespace IssueTracker.Controllers;
-
 
 public class IID 
 {
@@ -20,14 +21,17 @@ public class FriendsController : ControllerBase
 {
     private readonly FriendsService _friendsService;
     private readonly FriendsSubscriptionsService _subscriptionsService;
+    private readonly IHubContext<ChatHub> _hubContext;
 
     public FriendsController(
         FriendsService friendsService,
-        FriendsSubscriptionsService subscriptionsService
+        FriendsSubscriptionsService subscriptionsService, 
+        IHubContext<ChatHub> hubContext    
         )
     {
         _friendsService = friendsService;
         _subscriptionsService = subscriptionsService;
+        _hubContext = hubContext;
     }
 
     [HttpGet]
@@ -63,6 +67,8 @@ public class FriendsController : ControllerBase
     [HttpPost("subscribe")]
     public async Task<IActionResult> Subscribe(Guid userGuid, [FromBody] IID friendid)
     {
+        _hubContext.Clients.User(friendid.id).SendAsync("ReceiveNotification", "you have new subscriber");
+
         var success = await _subscriptionsService.Subscribe(userGuid, new Guid(friendid.id));
         if (success)
         return Ok("OK");
@@ -77,5 +83,4 @@ public class FriendsController : ControllerBase
         return Ok("OK");
         return BadRequest(ModelState);
     }
-
 }
