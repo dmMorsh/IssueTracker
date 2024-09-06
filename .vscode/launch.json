@@ -4,9 +4,8 @@
       {
         "name": "Launch All",
         "configurations": [
-          "Launch ASP.NET Core API"
-        //   ,
-        //   "Launch Angular SPA"
+          "Launch ASP.NET Core API",
+          "Launch Angular SPA"
         ]
       }
     ],
