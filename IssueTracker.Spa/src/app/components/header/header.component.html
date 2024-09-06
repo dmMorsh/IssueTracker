@@ -1,0 +1,14 @@
+<div class=" d-flex p-2 bd-highlight shadow-sm" id="ddd">
+
+    <img class="justify-content-start" width="30" height="30" src="assets/img/_2favicon.ico" alt="empty">
+    <div class="mx-2 flex-fill bd-highlight"></div>
+
+    <div *ngIf="isAuth" class="p-2 justify-content-end">
+        <a>{{currentNickName}}</a>
+    </div>       
+
+    <div class="px-2">
+        <button class="btn btn-outline-info" (click)="logOut()">LogOut</button>
+    </div>        
+
+</div>

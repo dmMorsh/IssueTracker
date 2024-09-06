@@ -1,0 +1,36 @@
+<div class="px-3">
+    <button class="pl-3 btn btn-outline-secondary" (click)="getTickets()">Refresh tickets</button>
+    <button class="pl-3 btn btn-outline-secondary" (click)="openAddDialog()">Add New ticket</button>
+    <button class="pl-3 btn btn-outline-secondary" [disabled]="currenPage <= 1" (click)="getTickets(currenPage-1)">BACK</button>
+    <button class="pl-3 btn btn-outline-secondary" [disabled]="currenPage == countPage" (click)="getTickets(currenPage+1)">FORWARD</button>
+    <span style="padding: 10px; border: 2px; border-color: yellowgreen;  "> -- {{currenPage}} page from {{countPage}} -- </span>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">title</th>
+        <th scope="col">creator</th>
+        <th scope="col">type</th>
+        <th scope="col">priority</th>
+        <th scope="col">status</th>
+        <th scope="col">create Date</th>
+        <th scope="col">due Date</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of mTicketView">
+        <td>{{ item.title }}</td>
+        <td>{{ item.creator }}</td>
+        <td>{{ tts.gettypeOfIssueName(item.issueType.toString()) }}</td>
+        <td>{{ tts.gettpriorityOfTaskName(item.priority.toString()) }}</td>
+        <td>{{ tts.getstatusOfTaskName(item.status.toString()) }}</td>
+        <td>{{ item.createDate.toString().slice(0,10) }}</td>
+        <td>{{ item.dueDate.toString().slice(0,10) }}</td>
+        <td><button class="btn" (click)="tts.openEditDialog(mTicketView, item)" >✏️</button></td>
+        <td><button class="btn" (click)="deleteItem(item)" >x</button></td>
+      </tr>
+    </tbody>
+  </table>

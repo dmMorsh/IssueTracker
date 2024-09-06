@@ -11,17 +11,17 @@
         ],
         "problemMatcher": "$msCompile"
       }
-    //   ,
-    //   {
-    //     "label": "npm: start --prefix IssueTracker.Spa",
-    //     "type": "npm",
-    //     "script": "start",
-    //     "group": "build",
-    //     "detail": "Запуск Angular SPA",
-    //     "options": {
-    //       "cwd": "${workspaceFolder}/IssueTracker.Spa"
-    //     }
-    //   }
+      ,
+      {
+        "label": "npm: start --prefix IssueTracker.Spa",
+        "type": "npm",
+        "script": "start",
+        "group": "build",
+        "detail": "Запуск Angular SPA",
+        "options": {
+          "cwd": "${workspaceFolder}/IssueTracker.Spa"
+        }
+      }
     ]
   }
   

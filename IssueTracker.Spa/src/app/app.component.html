@@ -1,0 +1,21 @@
+<app-header class="header"/>
+
+<main class="main">
+  <div class="content">
+    <ng-container *ngIf="isAuth; else ifUnAuth">
+    <div class="left-side">  
+      <app-navigation/>
+    </div>
+    <div class="right-side">
+      <router-outlet />     
+    </div>
+    </ng-container>
+  </div>
+</main>
+
+<ng-template #ifUnAuth>
+  
+  <div class="right-side">
+   <app-login></app-login>
+  </div>
+</ng-template>

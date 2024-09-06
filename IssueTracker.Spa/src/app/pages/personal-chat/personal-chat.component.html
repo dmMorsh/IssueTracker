@@ -1,0 +1,38 @@
+<a href="chats"> &lt; </a>
+<form class="form-inline" (ngSubmit)="sendChat()" [formGroup]="form">
+    <div class="form-group row px-3">
+      <input
+        type="text"
+        class="form-control col"
+        placeholder="Type message"
+        formControlName="chatmessage"
+      />
+
+      <div class="col">
+        <button
+          type="submit"
+          [disabled]="form.invalid || !connectionEstablished"
+          class="btn btn-primary">Send
+        </button>
+      </div>
+  </div>
+</form>
+
+<br>  
+<div style="top: 1px; left: 1px; max-height: 88%; overflow: scroll;">
+  <ul class="list-group list-group-flush" *ngFor="let message of chatmessages">
+      <div *ngIf="message.sender == userName"> 
+          <li class="list-group-item" style="width: 40%; left: 59%; border-radius: 10px; background-color: azure;">
+              {{ message.sender }} {{ message.dateSent| date: 'medium' }}:
+              <br>{{ message.message }}
+          </li>
+      </div>
+      <div *ngIf="message.sender != userName"> 
+          <li class="list-group-item" style="width: 40%; border-radius: 10px; background-color: #d1f2e7;">
+              {{ message.sender }} {{ message.dateSent| date: 'medium' }}:
+              <br>{{ message.message }}
+          </li>
+      </div>
+      <br>
+  </ul>
+</div>

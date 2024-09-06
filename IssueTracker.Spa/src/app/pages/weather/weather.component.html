@@ -1,0 +1,21 @@
+<div class="px-2">
+    <button class="btn btn-outline-secondary" (click)="GetWeather()">Get weather</button>
+</div>  
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">date</th>
+      <th scope="col">temperatureC</th>
+      <th scope="col">temperatureF</th>
+      <th scope="col">summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of mWeather">
+      <td>{{ item.date }}</td>
+      <td>{{ item.temperatureC }}</td>
+      <td>{{ item.temperatureF }}</td>
+      <td>{{ item.summary }}</td>
+    </tr>
+  </tbody>
+</table>

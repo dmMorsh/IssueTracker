@@ -1,0 +1,126 @@
+button{
+    margin-left: 2px;
+    }
+
+#editComments{
+position: absolute;
+top: 1%;
+left: 1%;
+width: 98%;
+height: 98%;
+background-color: rgb(165, 192, 255);
+z-index: 9999;
+}
+
+#editCommentsHeader{
+    // position: absolute;
+    top: 1%;
+    left: 1%;
+    width: 98%;
+    max-height: 500px;
+    height:78%; 
+    background-color:#ffffff;
+    overflow: scroll; 
+}
+
+#editCommentsTable{
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    width: 98%;
+    max-height: 500px;
+    height:78%; 
+    background-color: #ffffff;
+    overflow: scroll; 
+}
+
+#editCommentsFooter{
+    position: absolute;
+    top: 80%;
+    left: 1%;
+    width: 98%;
+    height:19%; 
+    background-color:azure
+}
+
+#editWatchers{
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    width: 98%;
+    height: 98%;
+    background-color: rgb(165, 192, 255);
+    z-index: 9999;
+    }
+    
+    #editWatchersHeader{
+        // position: absolute;
+        top: 1%;
+        left: 1%;
+        width: 100%;
+        max-height: 500px;
+        height:76%; 
+        background-color:#ffffff;
+        overflow: scroll; 
+    }
+    
+    #editWatchersTable{
+        position: absolute;
+        top: 1%;
+        left: 1%;
+        width: 98%;
+        max-height: 500px;
+        height:78%; 
+        background-color: #ffffff;
+        overflow: scroll; 
+    }
+    
+    #editWatchersFooter{
+        position: absolute;
+        top: 80%;
+        left: 1%;
+        width: 98%;
+        height:19%; 
+        background-color:azure
+    }
+
+    #editExecutors{
+        position: absolute;
+        top: 1%;
+        left: 1%;
+        width: 98%;
+        height: 98%;
+        background-color: rgb(165, 192, 255);
+        z-index: 9999;
+        }
+        
+        #editExecutorsHeader{
+            // position: absolute;
+            top: 1%;
+            left: 1%;
+            width: 100%;
+            max-height: 500px;
+            height:76%; 
+            background-color:#ffffff;
+            overflow: scroll; 
+        }
+        
+        #editExecutorsTable{
+            position: absolute;
+            top: 1%;
+            left: 1%;
+            width: 98%;
+            max-height: 500px;
+            height:78%; 
+            background-color: #ffffff;
+            overflow: scroll; 
+        }
+        
+        #editExecutorsFooter{
+            position: absolute;
+            top: 80%;
+            left: 1%;
+            width: 98%;
+            height:19%; 
+            background-color:azure
+        }

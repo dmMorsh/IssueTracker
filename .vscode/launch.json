@@ -31,15 +31,15 @@
           "/Views": "${workspaceFolder}/Views"
         }
       }
-    //   ,
-    //   {
-    //     "name": "Launch Angular SPA",
-    //     "type": "pwa-chrome",
-    //     "request": "launch",
-    //     "url": "http://localhost:4200",
-    //     "webRoot": "${workspaceFolder}/IssueTracker.Spa",
-    //     "preLaunchTask": "npm: start --prefix IssueTracker.Spa"
-    //   }
+      ,
+      {
+        "name": "Launch Angular SPA",
+        "type": "pwa-chrome",
+        "request": "launch",
+        "url": "http://localhost:4200",
+        "webRoot": "${workspaceFolder}/IssueTracker.Spa",
+        "preLaunchTask": "npm: start --prefix IssueTracker.Spa"
+      }
     ]
   }
   

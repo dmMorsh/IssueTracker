@@ -1,0 +1,16 @@
+<table class="table table-hover thead-dark">
+    <thead>
+        <tr>
+            <th class="col-7" scope="col">Name</th>
+            <th scope="col-1">watch Info</th>
+            <th scope="col-1">write Msg</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of users">
+            <td>{{ (item.username) }}</td>
+            <td><button class="btn" (click)="watchInfo(item)" >🔎</button></td>
+            <td><button class="btn" (click)="writeMsg(item)" >📨</button></td>
+        </tr>
+    </tbody>
+</table>

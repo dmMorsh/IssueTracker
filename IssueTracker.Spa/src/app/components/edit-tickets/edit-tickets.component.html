@@ -1,0 +1,189 @@
+<div class="card">
+    <div class="card-body">
+        <input type="hidden" id="creator" [(ngModel)]="editedTicket.creator">
+        <div class="form-group row">
+            <label for="title">title:</label>
+            <input type="text" id="title" [(ngModel)]="editedTicket.title" [disabled]="onlyRead">
+        </div>
+        <br>
+
+        <div class="form-group row-5">
+            <label for="description">description:</label>
+            <textarea style="height: 150px" class="form-control input-lg" type="text" id="description" 
+                [(ngModel)]="editedTicket.description" [disabled]="onlyRead">
+            </textarea>
+        </div>
+        <br>
+
+        <div class="form-group row">
+            <label for="issueType">type:</label>
+            <select [(ngModel)]="editedTicket.issueType" [disabled]="onlyRead">
+                <option *ngFor="let issueType of issueTypes" [value]="issueType">{{ issueType }}</option>
+            </select>
+        </div>
+        <br>
+        
+        <div class="form-group row">
+            <label for="priority">priority:</label>
+            <select [(ngModel)]="editedTicket.priority" [disabled]="onlyRead">
+                <option *ngFor="let priority of priorityTask" [value]="priority">{{ priority }}</option>
+            </select>
+        </div>
+        <br>
+
+        <div class="form-group row">
+            <label for="codeItem">status:</label>
+            <select [(ngModel)]="editedTicket.status">
+                <option *ngFor="let status of statusTask" [value]="status">{{ status }}</option>
+            </select>
+        </div>
+        <br>
+                
+        <div class="form-group col">
+            <label class="px-2" for="dueDate"> Due date: </label>
+            <input type="date" id="dueDate" [(ngModel)]="selectedDate" [disabled]="onlyRead">
+            <label class="px-2" for="dueDate"> Due time: </label>
+            <input type="time" id="dueDate" [(ngModel)]="selectedTime" [disabled]="onlyRead">
+        </div>
+        <br>
+
+        <div class="form-group col">
+            <label class="px-2" for="createDate">created Date:</label>
+            <label type="text" id="createDate" [innerHTML]="editedTicket.createDate.toString().slice(0,10)"></label>
+            
+            <div class="form-group col"> -->
+                <label class="px-2">=|||=</label>
+                <label class="px-2" for="updatedDate">updated Date:</label>
+                <label type="" id="updatedDate" [innerHTML]="editedTicket.updatedDate.toString().slice(0,10)"></label>
+                
+                <label class="px-2">=|||=</label>
+                <label class="px-2">Comments:</label>
+                <a style="color: blue;" (click)="isEditComment = true" id="comments" [innerHTML]="editedTicket.comments.length"></a>
+                
+                <label class="px-2">=|||=</label>
+                <label class="px-2">Watchers:</label>
+                <a style="color: blue;" (click)="isEditWatchers = true" id="watchers" [innerHTML]="editedTicket.watchList.length"></a>
+                
+                <label class="px-2">=|||=</label>
+                <label class="px-2">Co-executors:</label>
+                <a style="color: blue;" (click)="isEditExecutors = true" id="executors" [innerHTML]="editedTicket.executionList.length"></a>
+            </div>
+            <br>
+
+            <div class="form-group row">
+                <label for="executorId">executor:</label>
+                <ng-select [items]="users" [(ngModel)]="selectedUser" [virtualScroll]="true" bindValue="id" 
+                    bindLabel="username" placeholder="Выберите пользователя" [disabled]="onlyRead">
+                </ng-select>
+            </div>
+            <br>
+            
+            <button class="btn btn-primary" (click)="editCode()" [innerText]="isNew ? 'Create' : 'Edit'"></button>
+        </div>
+   
+    <div *ngIf="isEditComment" class="card-body" id="editComments">
+        <div id="editCommentsHeader">
+            <div id="editCommentsTable">
+                <table class="table table-hover thead-dark">
+                    <thead>
+                        <tr>
+                            <th class="col-1" scope="col">creator</th>
+                            <th class="col-1" scope="col">create_date</th>
+                            <th class="col-5" scope="col">description</th>
+                            <th scope="col" [hidden]="onlyRead">edited</th>
+                            <th scope="col" [hidden]="onlyRead">Edit</th>
+                            <th scope="col" [hidden]="onlyRead">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of editedTicket.comments">
+                            <td>{{ item.creator }}</td>
+                            <td>{{ (item.createDate.toString().slice(0,10)) }}</td>
+                            <td>{{ (item.description) }}</td>
+                            <td [hidden]="onlyRead">{{ (item.edited) }}</td>
+                            <td [hidden]="onlyRead"><button class="btn" (click)="editComment(item)">✏️</button></td>
+                            <td [hidden]="onlyRead"><button class="btn" (click)="deleteComment(item)">x</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="editCommentsFooter">
+            <textarea style="height: 86px" class="form-control input-lg" type="text" id="" [(ngModel)]="commentInput"></textarea>
+            <button class="btn btn-primary" (click)="pushComment(commentInput)">push</button>
+            <button *ngIf="editedId != -1" class="btn btn-primary" (click)="editComment()">cancel edit</button>
+            <button class="btn btn-primary" (click)="isEditComment = false">close</button>
+        </div>
+    </div>
+
+    <div *ngIf="isEditWatchers" class="card-body" id="editWatchers">
+        <div id="editWatchersHeader">
+            <div id="editWatchersTable">
+                <table class="table table-hover thead-dark">
+                    <thead>
+                        <tr>
+                            <th class="col-7" scope="col">Name</th>
+                            <th scope="col" [hidden]="onlyRead">Edit</th>
+                            <th scope="col" [hidden]="onlyRead">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of editedTicket.watchList">
+                            <td>{{ item.userName }}</td>
+                            <td [hidden]="onlyRead"><button class="btn" (click)="editWatcher(item)">✏️</button></td>
+                            <td [hidden]="onlyRead"><button class="btn" (click)="deleteWatcher(item)">x</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="editWatchersFooter">
+            <div class="form-group row">
+                <label for="watcherId">watcher:</label>
+                <ng-select [items]="users" [(ngModel)]="selectedWatcher" [virtualScroll]="true"
+                   bindValue="id" bindLabel="username" placeholder="Выберите пользователя" [disabled]="onlyRead">
+                </ng-select>
+            </div>
+            <button class="btn btn-primary" (click)="pushWatcher(selectedWatcher)" [hidden]="onlyRead">push</button>
+            <button *ngIf="editedWcId != '' " class="btn btn-primary" (click)="clearWatcher()" [hidden]="onlyRead">cancel edit</button>
+            <button class="btn btn-primary" (click)="isEditWatchers = false; clearWatcher()">close</button>
+        </div>
+    </div>
+
+    <div *ngIf="isEditExecutors" class="card-body" id="editExecutors">
+        <div id="editExecutorsHeader">
+            <div id="editExecutorsTable">
+                <table class="table table-hover thead-dark">
+                    <thead>
+                        <tr>
+                            <th class="col-7" scope="col">Name</th>
+                            <th scope="col" [hidden]="onlyRead">Edit</th>
+                            <th scope="col" [hidden]="onlyRead">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of editedTicket.executionList">
+                            <td>{{ item.userName }}</td>
+                            <td [hidden]="onlyRead"><button class="btn" (click)="editExecutor(item)">✏️</button></td>
+                            <td [hidden]="onlyRead"><button class="btn" (click)="deleteExecutor(item)">x</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="editExecutorsFooter">
+            <div class="form-group row">
+                <label for="executorId">executor:</label>
+                <ng-select [items]="users" [(ngModel)]="selectedExecuter" [virtualScroll]="true" 
+                  bindValue="id" bindLabel="username" placeholder="Выберите пользователя" [disabled]="onlyRead">
+                </ng-select>
+            </div>
+            <button class="btn btn-primary" (click)="pushExecuter(selectedExecuter)" [hidden]="onlyRead">push</button>
+            <button *ngIf="editedExId != '' " class="btn btn-primary" (click)="clearExecutor()" [hidden]="onlyRead">cancel edit</button>
+            <button class="btn btn-primary" (click)="isEditExecutors = false; clearExecutor()">close</button>
+        </div>
+    </div>
+</div>

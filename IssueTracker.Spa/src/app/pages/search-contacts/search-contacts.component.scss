@@ -1,0 +1,36 @@
+* {box-sizing: border-box;}
+form {
+  width: auto;
+  margin-left: 30px;
+
+  input {
+    width: 250px;
+    height: 42px;
+    padding-left: 15px;
+    border-radius: 42px;
+    border: 2px solid #324b4e;
+    background: #edf8fd;
+    outline: none;
+    position: relative;
+    transition: .3s linear;
+  }
+
+  input.expanded {
+    width: 600px;
+  }
+
+  button {
+    width: 42px;
+    height: 42px;
+    background: none;
+    border: none;
+    position: relative;
+    left: -70px;
+    right: 0;
+  }
+  button:before{
+    content: 'SEARCH';
+    font-family: FontAwesome;
+    color: #04143a;
+  }
+}

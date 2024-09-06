@@ -1,0 +1,36 @@
+
+  main {
+    width: 100%;
+    min-height: 92.5%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    background-color: #182fd9bc;
+  }
+
+  .content {
+    display: flex;
+    width: 100%;
+  }
+  .left-side{
+    position: absolute;
+    top: 0; 
+    bottom: 0; 
+    left: 0; 
+    min-width: 200px;
+    background: linear-gradient(#182fd900, #a618d9bc);
+    // overflow-y: auto; 
+  }
+  .right-side{
+    height: 100%;
+    width: 86%;
+    padding-left: 10px;
+    padding-top: 10px;
+    border: 1px solid #182fd900;
+    border-radius: 0.3%;
+    background-color: #f7f9fa;
+    position: absolute;
+    top: 0;
+    left: 200px;
+    overflow: scroll; 
+  }
