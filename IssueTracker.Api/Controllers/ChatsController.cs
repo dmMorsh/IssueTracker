@@ -32,15 +32,17 @@ public class ChatsController : ControllerBase
         if (chatId != null)
             return Ok(chatId);
         else
-            return BadRequest(new {message = "bad user"});
+            return BadRequest(new { message = "bad user" });
     }
 
     [HttpGet("getGuysById")]
     public async Task<IActionResult> getGuysById([FromQuery] int id)
     {
         var guys = await _chatsService.getGuysById(id);
-        if (guys == null) return BadRequest(new {message = "Something went wrong"});
-        return Ok(guys);
+        if (guys != null)
+            return Ok(guys);
+        else
+            return BadRequest(new { message = "Something went wrong" });
     }
 
     [HttpPost]
@@ -60,7 +62,6 @@ public class ChatsController : ControllerBase
         if (success)
             return Ok();
         else
-            return BadRequest(new {message = "bad user"});
+            return BadRequest(new { message = "bad user" });
     }
-
 }

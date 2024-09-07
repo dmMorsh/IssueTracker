@@ -15,6 +15,8 @@ import { CommentsService } from '../../services/comments.service';
 export class EditTicketsComponent implements OnInit, OnDestroy {
 
   onlyRead = false;
+  oldStatus = "";
+
   userId = "";
   userName = "";
 
@@ -24,10 +26,11 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
   commentInput = "";
   selectedDate = '2000-01-01';  //YYYY-MM-DD
   selectedTime = '10:00';       //HH:mm
-
+  //to switch card-body
   isEditComment = false;
   isEditWatchers = false;
   isEditExecutors = false;
+
   isNew = false;
   editedTicket!: ITicket;
 
@@ -39,21 +42,27 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
   filteredUsers: any[] = [];
 
   issueTypes = Object.keys(typeOfIssue)
-  .filter(key => isNaN(Number(key)));
+    .filter(key => isNaN(Number(key)));
 
   priorityTask = Object.keys(priorityOfTask)
-  .filter(key => isNaN(Number(key)));
+    .filter(key => isNaN(Number(key)));
 
   statusTask = Object.keys(statusOfTask)
-  .filter(key => isNaN(Number(key)));
+    .filter(key => isNaN(Number(key)));
 
-  constructor(private dialogRef: MatDialogRef<EditTicketsComponent>
-    , private datePipe: DatePipe
-    , private uService : UsersService
-    , private commService : CommentsService
-    ,@Inject(MAT_DIALOG_DATA) public data: {ticket:ITicket, onlyRead:boolean}) {}
+  constructor(
+    private dialogRef: MatDialogRef<EditTicketsComponent>,
+    private datePipe: DatePipe,
+    private uService: UsersService,
+    private commService: CommentsService
+    , @Inject(MAT_DIALOG_DATA) public data: { ticket: ITicket, onlyRead: boolean }) { }
 
   ngOnDestroy(): void {
+
+    if(this.onlyRead && this.editedTicket.status == this.oldStatus){
+      this.dialogRef.close();
+      return;
+    }
 
     //normalize enums
     this.editedTicket.issueType = this.issueTypes.indexOf(this.editedTicket.issueType.toString());
@@ -61,60 +70,69 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
     this.editedTicket.priority = this.priorityTask.indexOf(this.editedTicket.priority.toString());
 
     //to refresh name on page
-    const objectToFind = { id: this.selectedUser};
+    const objectToFind = { id: this.selectedUser };
     const index = this.users.findIndex(obj => obj.id === objectToFind.id);
     if (index !== -1) {
       this.editedTicket.executor = this.users[index].username;
-      
-      if(this.editedTicket.executionList.length == 0){        
-        this.editedTicket.executionList.push({ticketId: this.editedTicket.id, userId: this.selectedUser, 
-          userName: this.users.find(i => i.id == this.selectedUser).username})
-      }else{
+
+      if (this.editedTicket.executionList.length == 0) {
+        this.editedTicket.executionList.push({
+          ticketId: this.editedTicket.id, userId: this.selectedUser,
+          userName: this.users.find(i => i.id == this.selectedUser).username
+        })
+      } else {
         var i = this.editedTicket.executionList.findIndex(obj =>
           obj.userId === this.selectedUser &&
           obj.ticketId === this.editedTicket.id
         );
-        if(i === -1){
-          this.editedTicket.executionList.push({userId: this.selectedUser, ticketId: this.editedTicket.id});
-        } 
+        if (i === -1) {
+          this.editedTicket.executionList.push({ userId: this.selectedUser, ticketId: this.editedTicket.id });
+        }
       }
     }
-    if(this.editedTicket.watchList.length == 0){
-      this.editedTicket.watchList.push({ticketId: this.editedTicket.id, userId: this.userId, 
-        userName: this.userName})
+    if (this.editedTicket.watchList.length == 0) {
+      this.editedTicket.watchList.push({
+        ticketId: this.editedTicket.id, userId: this.userId,
+        userName: this.userName
+      })
     }
     this.editedTicket.executorId = this.selectedUser;
 
     //normalize date
-    var strDate: any = ""+this.selectedDate+ "T"+ this.selectedTime +":00.000Z";
+    var strDate: any = "" + this.selectedDate + "T" + this.selectedTime + ":00.000Z";
     this.editedTicket.dueDate = strDate;
     var newDate: any = this.datePipe.transform(new Date, 'yyyy-MM-ddTHH:mm:ss.SSS') + "Z";
     this.editedTicket.updatedDate = newDate;
-    if(this.isNew){
+    if (this.isNew) {
       newDate = this.datePipe.transform(this.editedTicket.createDate, 'yyyy-MM-ddTHH:mm:ss.SSS') + "Z";
       this.editedTicket.createDate = newDate;
     }
 
     this.dialogRef.close(this.editedTicket);
   }
-  
+
   ngOnInit(): void {
 
-    this.onlyRead = this.data?.onlyRead ?? false;      
     this.editedTicket = JSON.parse(JSON.stringify(this.data?.ticket ?? null));
-    
+
+    this.onlyRead = this.data?.onlyRead ?? false;
+    if(this.editedTicket != null && this.onlyRead){
+      var myInt: any = (this.editedTicket.status);
+      this.oldStatus = Object.values(statusOfTask)[myInt] as string;
+    }
+
     this.userId = localStorage.getItem('userId')!;
     if (!this.userId) this.userId = "";
     this.userName = localStorage.getItem('username')!;
     if (!this.userName) this.userName = "unknown";
 
-    if(!this.editedTicket){
-      this.makeNewTicket();  
-    }else{
+    if (!this.editedTicket) {
+      this.makeNewTicket();
+    } else {
       this.fillTicket();
     }
 
-    this.uService.getAll().subscribe(str => {   
+    this.uService.getAll().subscribe(str => {
 
       var _str = JSON.stringify(str);
       var parsedJson: any[] = JSON.parse(_str);
@@ -123,24 +141,24 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         parsedJson.splice(index, 1);
       }
-      if(this.editedTicket.executorId != this.userId){
-        parsedJson.push({id: this.userId, username: this.userName});
+      if (this.editedTicket.executorId != this.userId) {
+        parsedJson.push({ id: this.userId, username: this.userName });
       }
       this.users = this.users.concat(parsedJson);
     });
   }
 
-  makeNewTicket(){
+  makeNewTicket() {
 
     this.isNew = true;
     this.editedTicket = {
       id: 0,
       title: '',
-    
+
       createDate: new Date(),
       updatedDate: new Date(),
       dueDate: new Date(),
-    
+
       creatorId: this.userId,
       executorId: "",
       creator: "",
@@ -149,52 +167,51 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
       issueType: "task",
       status: "todo",
       priority: "high",
-    
+
       description: '',
       executionList: [],
-      watchList: [{userId: this.userId, ticketId: 0, userName: this.userName }],
+      watchList: [{ userId: this.userId, ticketId: 0, userName: this.userName }],
       comments: []
     }
   }
 
-  fillTicket(){
+  fillTicket() {
 
-    if(this.editedTicket.executor != ""){
-      this.users.push( {id: this.editedTicket.executorId, username: this.editedTicket.executor} ); 
+    if (this.editedTicket.executor != "") {
+      this.users.push({ id: this.editedTicket.executorId, username: this.editedTicket.executor });
       this.selectedUser = this.editedTicket.executorId;
     }
-    this.selectedDate = this.editedTicket.dueDate.toString().slice(0,10)
-    this.selectedTime = this.editedTicket.dueDate.toString().slice(11,16)
+    this.selectedDate = this.editedTicket.dueDate.toString().slice(0, 10)
+    this.selectedTime = this.editedTicket.dueDate.toString().slice(11, 16)
     var myInt: any = (this.editedTicket.issueType);
     this.editedTicket.issueType = Object.values(typeOfIssue)[myInt];
     var myInt: any = (this.editedTicket.status);
-    this.editedTicket.status = Object.values(statusOfTask)[myInt]; 
+    this.editedTicket.status = Object.values(statusOfTask)[myInt];
     var myInt: any = (this.editedTicket.priority);
     this.editedTicket.priority = Object.values(priorityOfTask)[myInt];
-    
-    if(this.editedTicket.executionList === undefined){
+
+    if (this.editedTicket.executionList === undefined) {
       this.editedTicket.executionList = [];
     }
-    if(this.editedTicket.watchList === undefined){
+    if (this.editedTicket.watchList === undefined) {
       this.editedTicket.watchList = [];
     }
-    if(this.editedTicket.comments === undefined){
+    if (this.editedTicket.comments === undefined) {
       this.editedTicket.comments = [];
     }
   }
 
-  updateUserList(){
+  updateUserList() {
     this.filteredUsers = this.users.filter(user => user.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
   }
 
-  editCode(): void {
+  editTicket(): void {
     this.dialogRef.close();
   }
-  
+
   pushComment(desc: string) {
 
-    if(desc != "" && this.editedId == -1)
-    {
+    if (desc != "" && this.editedId == -1) {
       var newComm: ITicketComment = {
         id: 0,
         ticketId: this.editedTicket.id,
@@ -208,11 +225,11 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
         var parsedJson = JSON.parse(_str);
         this.editedTicket.comments.unshift(parsedJson);
         this.commentInput = "";
-      }); 
-    }else if(desc != "" && this.editedId != -1){
+      });
+    } else if (desc != "" && this.editedId != -1) {
       var oldComm: ITicketComment = this.editedTicket.comments
-                    [this.editedTicket.comments.findIndex(obj => obj.id === this.editedId)]
-      
+      [this.editedTicket.comments.findIndex(obj => obj.id === this.editedId)]
+
       var editComm: ITicketComment = Object.assign({}, oldComm);
       this.commService.update(editComm).subscribe(str => {
         oldComm.edited = true;
@@ -225,29 +242,29 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
 
   deleteComment(comm: ITicketComment) {
 
-    this.commService.delete(comm).subscribe(str => { 
-      var num: number = this.editedTicket.comments.findIndex(obj => 
+    this.commService.delete(comm).subscribe(str => {
+      var num: number = this.editedTicket.comments.findIndex(obj =>
         obj.id === comm.id
         && obj.createDate === comm.createDate
         && obj.creator === comm.creator);
-        this.editedTicket.comments.splice(num, 1);
+      this.editedTicket.comments.splice(num, 1);
     });
   }
 
-  editComment(comm: ITicketComment | null = null){
+  editComment(comm: ITicketComment | null = null) {
 
-    if(comm){
+    if (comm) {
       this.commentInput = comm.description;
       this.editedId = comm.id;
-    }else{
+    } else {
       this.commentInput = "";
       this.editedId = -1;
     }
   }
-  
+
   deleteExecutor(ex: IExecutionList) {
 
-    var num: number = this.editedTicket.executionList.findIndex(obj => 
+    var num: number = this.editedTicket.executionList.findIndex(obj =>
       obj.ticketId === ex.ticketId
       && obj.userId === ex.userId
       && obj.userName === ex.userName
@@ -257,10 +274,10 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
 
   editExecutor(ex: IExecutionList) {
 
-    if(ex){
+    if (ex) {
       this.editedExId = ex.userId;
       this.selectedExecuter = ex.userId;
-    } else{
+    } else {
       this.editedExId = "";
     };
   }
@@ -273,33 +290,33 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
   pushExecuter(arg0: string) {
 
     var found = this.editedTicket.executionList.find(i => i.userId == this.selectedExecuter);
-    if(found){
+    if (found) {
       this.selectedExecuter = "";
       this.editedExId = "";
       return;
     }
 
-    if(this.selectedExecuter !== "" && this.selectedExecuter !== null){
-      if(this.editedExId === ""){     
+    if (this.selectedExecuter !== "" && this.selectedExecuter !== null) {
+      if (this.editedExId === "") {
         var name = this.users.find(i => i.id == this.selectedExecuter).username;
-        this.editedTicket.executionList.push({ticketId: this.editedTicket.id, userId: this.selectedExecuter, userName: name})
+        this.editedTicket.executionList.push({ ticketId: this.editedTicket.id, userId: this.selectedExecuter, userName: name })
         this.selectedExecuter = "";
-      }else{//if need replase
+      } else {//if need replase
         var oldEx: IExecutionList = this.editedTicket.executionList
-                      [this.editedTicket.executionList.findIndex(obj => obj.userId === this.editedExId)]
+        [this.editedTicket.executionList.findIndex(obj => obj.userId === this.editedExId)]
         oldEx.userId = this.selectedExecuter;
-        oldEx.userName = this.users.find(i => i.id == this.selectedExecuter).username;   
+        oldEx.userName = this.users.find(i => i.id == this.selectedExecuter).username;
         this.selectedExecuter = "";
-        this.editedExId = "";    
+        this.editedExId = "";
       }
-    }else{
+    } else {
       this.editedExId = "";
     };
   }
 
   deleteWatcher(ex: IWatchList) {
 
-    var num: number = this.editedTicket.watchList.findIndex(obj => 
+    var num: number = this.editedTicket.watchList.findIndex(obj =>
       obj.ticketId === ex.ticketId
       && obj.userId === ex.userId
       && obj.userName === ex.userName
@@ -309,10 +326,10 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
 
   editWatcher(wc: IWatchList) {
 
-    if(wc){
+    if (wc) {
       this.editedWcId = wc.userId;
       this.selectedWatcher = wc.userId;
-    } else{
+    } else {
       this.editedWcId = "";
     }
   }
@@ -325,26 +342,26 @@ export class EditTicketsComponent implements OnInit, OnDestroy {
   pushWatcher(arg0: string) {
 
     var found = this.editedTicket.watchList.find(i => i.userId == this.selectedWatcher);
-    if(found){
+    if (found) {
       this.selectedWatcher = "";
       this.editedWcId = "";
       return;
     }
 
-    if(this.selectedWatcher !== "" && this.selectedWatcher!== null){
-      if(this.editedWcId === ""){     
+    if (this.selectedWatcher !== "" && this.selectedWatcher !== null) {
+      if (this.editedWcId === "") {
         var name = this.users.find(i => i.id == this.selectedWatcher).username;
-        this.editedTicket.watchList.push({ticketId: this.editedTicket.id, userId: this.selectedWatcher, userName: name})
+        this.editedTicket.watchList.push({ ticketId: this.editedTicket.id, userId: this.selectedWatcher, userName: name })
         this.selectedWatcher = "";
-      }else{//if need replase
+      } else {//if need replase
         var oldWc: IWatchList = this.editedTicket.watchList
-                      [this.editedTicket.watchList.findIndex(obj => obj.userId === this.editedWcId)]
+        [this.editedTicket.watchList.findIndex(obj => obj.userId === this.editedWcId)]
         oldWc.userId = this.selectedWatcher;
-        oldWc.userName = this.users.find(i => i.id == this.selectedWatcher).username;   
+        oldWc.userName = this.users.find(i => i.id == this.selectedWatcher).username;
         this.selectedWatcher = "";
-        this.editedWcId = "";    
+        this.editedWcId = "";
       }
-    }else{
+    } else {
       this.editedWcId = "";
     };
   }

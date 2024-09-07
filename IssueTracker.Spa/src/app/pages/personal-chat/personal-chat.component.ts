@@ -29,11 +29,11 @@ export class PersonalChatComponent implements OnInit, OnDestroy {
     chatmessage: ['', Validators.required],
   });
 
-  constructor(private route: ActivatedRoute, 
-    private readonly signalRService: SignalRService, 
-    private msgService: MessagesService, 
-    private chtService: ChatsService, 
-    private router: Router) {}
+  constructor(private route: ActivatedRoute,
+    private readonly signalRService: SignalRService,
+    private msgService: MessagesService,
+    private chtService: ChatsService,
+    private router: Router) { }
 
   ngOnInit() {
 
@@ -42,7 +42,7 @@ export class PersonalChatComponent implements OnInit, OnDestroy {
       this.chatId = parseInt(params['chatId']);
       this.userId = params['userId'];
 
-      if(!this.chatId){
+      if (!this.chatId) {
         this.router.navigate((['/contacts']))
         return
       }
@@ -51,12 +51,12 @@ export class PersonalChatComponent implements OnInit, OnDestroy {
         this.users = str;
         //give my name
         const user = this.users.find(user => user.id === this.userId);
-        this.userName = user ? user.username : "Unknown" 
+        this.userName = user ? user.username : "Unknown"
 
         this.msgService.getById(this.chatId.toString()).subscribe(str => {
-          if(str)
+          if (str)
             this.chatmessages = str;
-          
+
           ////give names
           this.chatmessages = this.chatmessages.map(message => {
             const user = this.users.find(user => user.id === message.sender);
@@ -64,7 +64,7 @@ export class PersonalChatComponent implements OnInit, OnDestroy {
               ...message,
               sender: user ? user.username : "Unknown" // add sender name to msg
             };
-          });  
+          });
         })
       });
 
@@ -77,21 +77,21 @@ export class PersonalChatComponent implements OnInit, OnDestroy {
     this.signalRService.disconnect();
   }
 
-  connect(int: number){
+  connect(int: number) {
     this.signalRService.init(this.chatId);
     this.signalRService.messageReceived$.subscribe((message) => {
       const user = this.users.find(user => user.id === message.sender);
-      message.sender = user ? user.username : "Unknown" 
+      message.sender = user ? user.username : "Unknown"
       this.chatmessages.unshift(message);
     });
   }
 
   sendChat() {
     var message: Message = {
-      id:1, 
-      chatId: this.chatId, 
-      dateSent: new Date, 
-      message: this.form.controls.chatmessage.value!, 
+      id: 1,
+      chatId: this.chatId,
+      dateSent: new Date,
+      message: this.form.controls.chatmessage.value!,
       sender: this.userId
     }
     this.form.controls.chatmessage.setValue('')

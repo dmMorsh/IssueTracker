@@ -22,7 +22,7 @@ export class TicketToolsService {
     const values = Object.values(typeOfIssue);
     return values[parseInt(item)].toString();
   }
-  
+
   gettpriorityOfTaskName(item: string): string {
     const values = Object.values(priorityOfTask);
     return values[parseInt(item)].toString();
@@ -30,21 +30,21 @@ export class TicketToolsService {
 
   openEditDialog(mTicketView: ITicket[], item: ITicket, onlyRead: boolean = false): void {
 
-    const dialogRef = this.dialog.open(EditTicketsComponent, 
-      {width: '600px', data: {ticket: item, onlyRead:onlyRead}});
+    const dialogRef = this.dialog.open(EditTicketsComponent,
+      { width: '600px', data: { ticket: item, onlyRead: onlyRead } });
 
-    dialogRef.afterClosed().subscribe((result: ITicket) => {
+    dialogRef.afterClosed().subscribe((result: ITicket | undefined) => {
       if (result) {
         this.editItem(result, item as ITicket, mTicketView);
       }
-    });  
+    });
   }
 
   editItem(result: ITicket, item: ITicket, mTicketView: ITicket[]) {
     this.ticketService.update(result).subscribe(str => {
       var i = mTicketView.indexOf(item as unknown as ITicket);
-      if(i !== -1){
-        mTicketView[i] = result as unknown as ITicket; 
+      if (i !== -1) {
+        mTicketView[i] = result as unknown as ITicket;
       }
     });
   }

@@ -6,7 +6,6 @@ namespace IssueTracker.Dal.Context;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
-
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -25,44 +24,43 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<ApplicationUser>()
-                    .HasMany(u => u.Friends)
-                    .WithMany()
-                    .UsingEntity<Dictionary<string, object>>(
-                    "UserFriends",
-                    u => u.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId"),
-                    f => f.HasOne<ApplicationUser>().WithMany().HasForeignKey("FriendId"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "FriendId");
-                        j.ToTable("UserFriends");
-                    });
+            .HasMany(u => u.Friends)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+            "UserFriends",
+            u => u.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId"),
+            f => f.HasOne<ApplicationUser>().WithMany().HasForeignKey("FriendId"),
+            j =>
+            {
+                j.HasKey("UserId", "FriendId");
+                j.ToTable("UserFriends");
+            });
 
         modelBuilder.Entity<ApplicationUser>()
-                    .HasMany(u => u.Subscriptions)
-                    .WithMany()
-                    .UsingEntity<Dictionary<string, object>>(
-                    "UserSubscriptions",
-                    u => u.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId"),
-                    f => f.HasOne<ApplicationUser>().WithMany().HasForeignKey("FriendId"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "FriendId");
-                        j.ToTable("UserSubscriptions");
-                    });
+            .HasMany(u => u.Subscriptions)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+            "UserSubscriptions",
+            u => u.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId"),
+            f => f.HasOne<ApplicationUser>().WithMany().HasForeignKey("FriendId"),
+            j =>
+            {
+                j.HasKey("UserId", "FriendId");
+                j.ToTable("UserSubscriptions");
+            });
 
         modelBuilder.Entity<ApplicationUser>()
-                    .HasMany(u => u.FriendRequests)
-                    .WithMany()
-                    .UsingEntity<Dictionary<string, object>>(
-                    "UserFriendRequests",
-                    u => u.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId"),
-                    f => f.HasOne<ApplicationUser>().WithMany().HasForeignKey("FriendId"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "FriendId");
-                        j.ToTable("UserFriendRequests");
-                    });
-
+            .HasMany(u => u.FriendRequests)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+            "UserFriendRequests",
+            u => u.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId"),
+            f => f.HasOne<ApplicationUser>().WithMany().HasForeignKey("FriendId"),
+            j =>
+            {
+                j.HasKey("UserId", "FriendId");
+                j.ToTable("UserFriendRequests");
+            });
 
         modelBuilder.Entity<ExecutionList>().HasKey(u => new { u.UserId, u.TicketId });
 

@@ -12,18 +12,20 @@ export class HeaderComponent {
   isAuth = false;
   currentNickName = "";
 
-  constructor(private authService: AuthService){
-   
+  constructor(private authService: AuthService) {
+
     this.authService.isAuth$.subscribe(newisAuth => {
-      this.isAuth = newisAuth;})
+      this.isAuth = newisAuth;
+    })
 
     this.authService.currentNickName$.subscribe(newNickName => {
-        this.currentNickName = newNickName;})
-  
+      this.currentNickName = newNickName;
+    })
+
     this.authService.checkAuth();
   }
 
-  logOut(){ 
+  logOut() {
     this.authService.setCondition(false);
     this.authService.logOut();
   }

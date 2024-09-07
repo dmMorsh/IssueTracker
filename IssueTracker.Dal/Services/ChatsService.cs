@@ -15,14 +15,14 @@ public class ChatsService
     public async Task<IEnumerable<object>> Get(Guid userId)
     {
         var user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
-        if (user == null) 
+        if (user == null)
             return null;
 
         var chats = await _context.chats
             .Where(c => c.Users.Contains(user))
             .Select(chat => new
             {
-                chat.id, 
+                chat.id,
                 info = chat.isPersonal
                     ? chat.Users
                         .Where(u => u.Id != userId)
@@ -37,7 +37,7 @@ public class ChatsService
                     .Select(m => m.message)
                     .FirstOrDefault()
             })
-            .Where(c=>c.lastMessage != null)
+            .Where(c => c.lastMessage != null)
             .ToListAsync();
         return chats;
     }
@@ -76,7 +76,7 @@ public class ChatsService
         var users = await _context.chats
         .Where(chat => chat.id == id)
         .SelectMany(chat => chat.Users) // Выборка всех пользователей из найденного чата
-        .Select(x => new MiniUser{ id = x.Id, username = x.UserName })
+        .Select(x => new MiniUser { id = x.Id, username = x.UserName })
         .ToListAsync();
         return users;
     }
@@ -91,16 +91,10 @@ public class ChatsService
     public async Task<bool> Remove(int id)
     {
         var item = await _context.chats.FirstOrDefaultAsync(o => o.id == id);
-        if (item != null)
-        {
-            _context.chats.Remove(item);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        else
-        {
+        if (item == null)
             return false;
-        }
+        _context.chats.Remove(item);
+        await _context.SaveChangesAsync();
+        return true;
     }
-
 }

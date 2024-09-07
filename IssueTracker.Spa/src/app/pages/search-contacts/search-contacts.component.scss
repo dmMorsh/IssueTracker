@@ -1,4 +1,7 @@
-* {box-sizing: border-box;}
+* {
+  box-sizing: border-box;
+}
+
 form {
   width: auto;
   margin-left: 30px;
@@ -28,7 +31,8 @@ form {
     left: -70px;
     right: 0;
   }
-  button:before{
+
+  button:before {
     content: 'SEARCH';
     font-family: FontAwesome;
     color: #04143a;

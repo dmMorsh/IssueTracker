@@ -11,17 +11,17 @@ export class CommentsService {
 
     constructor(private http: HttpClient) {
         this.apiUrl = `${API_URL}`;
-     }
+    }
 
-    create(item: ITicketComment){
+    create(item: ITicketComment) {
         return this.http.post<string>(`${this.apiUrl}/Comments`, item);
     }
 
-    update(item: ITicketComment){
+    update(item: ITicketComment) {
         return this.http.put<string>(`${this.apiUrl}/Comments/${item.id}`, item);
     }
 
-    delete(item: ITicketComment){
+    delete(item: ITicketComment) {
         return this.http.delete(`${this.apiUrl}/Comments/${item.id}`);
     }
 }

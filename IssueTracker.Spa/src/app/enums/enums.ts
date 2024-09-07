@@ -1,4 +1,3 @@
-
 export enum typeOfIssue {
   story,
   task,
@@ -9,11 +8,11 @@ export enum typeOfIssue {
 export enum statusOfTask {
   todo,
   inProgress,
-  done 
+  done
 }
 
 export enum priorityOfTask {
   high,
   medium,
-  low 
+  low
 }

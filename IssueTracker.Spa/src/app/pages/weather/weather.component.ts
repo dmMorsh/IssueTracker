@@ -25,18 +25,18 @@ export class WeatherComponent implements OnInit {
 
   mWeather: IWeather[] = [];
 
-  constructor(private weatherService: WeatherService){}
-  
+  constructor(private weatherService: WeatherService) { }
+
   ngOnInit(): void {
     this.GetWeather();
   }
 
-  GetWeather(){
-    this.weatherService.getAll().subscribe(str => {      
+  GetWeather() {
+    this.weatherService.getAll().subscribe(str => {
       var _str = JSON.stringify(str);
       var parsedJson = JSON.parse(_str);
       var newWeather = parsedJson;
-      this.mWeather = this.mWeather.concat(newWeather); 
+      this.mWeather = this.mWeather.concat(newWeather);
     });
   }
 }

@@ -12,7 +12,7 @@ export class MessagesService {
 
     constructor(private http: HttpClient) {
         this.apiUrl = `${API_URL}`;
-     }
+    }
 
     getAll() {
         return this.http.get<string>(`${this.apiUrl}/Messages`);
@@ -22,15 +22,15 @@ export class MessagesService {
         return this.http.get<Array<Message>>(`${this.apiUrl}/Messages/getById?id=${id}`);
     }
 
-    create(item: ITicket){        
+    create(item: ITicket) {
         return this.http.post<string>(`${this.apiUrl}/Messages`, item);
     }
 
-    update(item: ITicket){
+    update(item: ITicket) {
         return this.http.put<string>(`${this.apiUrl}/Messages/${item.id}`, item);
     }
 
-    delete(item: ITicket){
+    delete(item: ITicket) {
         return this.http.delete(`${this.apiUrl}/Messages/${item.id}`);
     }
 }

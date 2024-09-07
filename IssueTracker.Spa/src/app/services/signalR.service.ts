@@ -8,6 +8,7 @@ import {
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Message } from '../models/message.model';
 import { API_URL } from '../constants/constants';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -20,24 +21,29 @@ export class SignalRService {
   get messageReceived$() {
     return this.messageReceived.asObservable();
   }
-  
+
   get connectionEstablished$() {
     return this.connectionEstablished.asObservable();
   }
-  
-  init(chatId: number){    
-    this.createConnection(chatId);
-    this.registerOnServerEvents();
-    this.startConnection();    
+
+  constructor(private cookieService: CookieService) { }
+
+  init(chatId: number) {
+    var token: string = this.cookieService.get('token')!;
+    if (token != null) {
+      this.createConnection(token, chatId);
+      this.registerOnServerEvents();
+      this.startConnection();
+    }
   }
 
   sendChatMessage(message: Message) {
     this.hubConnection.invoke('SendMessage', message);
   }
 
-  private createConnection(ChatId: number) {
+  private createConnection(token: string, ChatId: number) {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(API_URL + `/chathub?chatId=${ChatId}`)
+      .withUrl(API_URL + `/chathub?chatId=${ChatId}`, { accessTokenFactory: () => token })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();
@@ -57,10 +63,10 @@ export class SignalRService {
 
   private registerOnServerEvents(): void {
     this.hubConnection.on('Send', (data) => {
-        this.messageReceived.next(data);
+      this.messageReceived.next(data);
     });
     this.hubConnection.on('ReceiveMessage', (data) => {
-        this.messageReceived.next(data);
+      this.messageReceived.next(data);
     });
   }
 

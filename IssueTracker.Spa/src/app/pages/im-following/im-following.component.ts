@@ -9,17 +9,17 @@ import { Router } from '@angular/router';
   styleUrl: './im-following.component.scss'
 })
 
-export class ImFollowingComponent implements OnInit{
-  
+export class ImFollowingComponent implements OnInit {
+
   users: IUser[] = [];
 
-  constructor(private uService: UsersService, private router: Router) {}
+  constructor(private uService: UsersService, private router: Router) { }
 
   ngOnInit(): void {
     this.getSubscriptions();
   }
 
-  getSubscriptions(){
+  getSubscriptions() {
     this.uService.getSubscriptions().subscribe(str => {
       var _str = JSON.stringify(str);
       var parsedJson: IUser[] = JSON.parse(_str);
@@ -32,15 +32,14 @@ export class ImFollowingComponent implements OnInit{
   }
 
   delFriend(friend: IUser) {
-    
+
     this.uService.unsubscribe(friend).subscribe(str => {
-      if(str == "OK"){
+      if (str == "OK") {
         var i = this.users.indexOf(friend);
-        if(i !== -1){
-          this.users.splice(i,1);
+        if (i !== -1) {
+          this.users.splice(i, 1);
         }
       }
     });
   }
-
 }

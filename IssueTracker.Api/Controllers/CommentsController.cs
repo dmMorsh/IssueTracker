@@ -22,14 +22,14 @@ public class CommentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var ticketCommentDto = _commentsService.GetAll();
+        var ticketCommentDto = await _commentsService.GetAll();
         return Ok(ticketCommentDto);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] TicketCommentDto itemDto)
     {
-        var _itemDto = _commentsService.Add(itemDto);
+        var _itemDto = await _commentsService.Add(itemDto);
         if (_itemDto != null)
             return Ok(_itemDto);
         else
@@ -50,11 +50,9 @@ public class CommentsController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var success = await _commentsService.Remove(id);
-        if (success) 
+        if (success)
             return Ok();
         else
             return BadRequest(new { message = "bad request" });
     }
-
-
 }

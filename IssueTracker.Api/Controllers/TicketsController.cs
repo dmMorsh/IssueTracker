@@ -16,16 +16,14 @@ public class TicketsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly TicketsService _ticketsService;
-    private readonly UsersService _usersService;
-    
+
     public TicketsController(
-        TicketsService ticketsService
-        , UsersService usersService
-        , IMapper mapper)
+        TicketsService ticketsService,
+        UsersService usersService,
+        IMapper mapper)
     {
         _mapper = mapper;
         _ticketsService = ticketsService;
-        _usersService = usersService;
     }
 
     [HttpGet]
@@ -39,17 +37,17 @@ public class TicketsController : ControllerBase
     [HttpGet("page")]
     public async Task<IActionResult> GetPage([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var tuple = await _ticketsService.GetPage(page, pageSize);   
-        var _items = tuple.Item1;
+        var tuple = await _ticketsService.GetPage(page, pageSize);
+        var items = tuple.Item1;
         int totalCount = tuple.Item2;
-        int _totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        if (_items.Count() == 0)
-            _totalPages = 1;
-        
+        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        if (items.Count() == 0)
+            totalPages = 1;
+
         return Ok(new
         {
-            totalPages = _totalPages,
-            tickets = _items
+            totalPages = totalPages,
+            tickets = items
         });
     }
 
@@ -57,16 +55,16 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> GetWatchingPage(Guid userGuid, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var tuple = await _ticketsService.GetWatchingPage(userGuid, page, pageSize);
-        var _items = tuple.Item1;
+        var items = tuple.Item1;
         int totalCount = tuple.Item2;
-        int _totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        if (_items.Count() == 0)
-            _totalPages = 1;
+        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        if (items.Count() == 0)
+            totalPages = 1;
 
         return Ok(new
         {
-            totalPages = _totalPages,
-            tickets = _items
+            totalPages = totalPages,
+            tickets = items
         });
     }
 
@@ -74,24 +72,24 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> GetExecutingPage(Guid userGuid, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var tuple = await _ticketsService.GetExecutingPage(userGuid, page, pageSize);
-        var _items = tuple.Item1;
+        var items = tuple.Item1;
         int totalCount = tuple.Item2;
-        int _totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        if (_items.Count() == 0)
-            _totalPages = 1;
+        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        if (items.Count() == 0)
+            totalPages = 1;
 
         return Ok(new
         {
-            totalPages = _totalPages,
-            tickets = _items
+            totalPages = totalPages,
+            tickets = items
         });
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] TicketDto ticketDto)
     {
-        var _itemDto = await _ticketsService.Add(ticketDto);
-        return Ok(_itemDto);
+        var itemDto = await _ticketsService.Add(ticketDto);
+        return Ok(itemDto);
     }
 
     [HttpPut("{id}")]
@@ -108,10 +106,9 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var success = await _ticketsService.Remove(id);
-        if (success)          
+        if (success)
             return Ok();
         else
-            return BadRequest(new {message = "not found"});
+            return BadRequest(new { message = "not found" });
     }
-
 }

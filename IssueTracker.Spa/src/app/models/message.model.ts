@@ -1,4 +1,3 @@
-
 export interface Message {
 
   id: number,
@@ -6,5 +5,4 @@ export interface Message {
   sender: string,
   message: string,
   dateSent: Date
-
 }

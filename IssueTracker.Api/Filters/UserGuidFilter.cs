@@ -7,7 +7,8 @@ public class UserGuidFilter : IActionFilter
     {
         var userId = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (!string.IsNullOrEmpty(userId) && Guid.TryParse(userId, out var userGuid))
+        if (!string.IsNullOrEmpty(userId)
+        && Guid.TryParse(userId, out var userGuid))
         {
             context.ActionArguments["userGuid"] = userGuid;
         }

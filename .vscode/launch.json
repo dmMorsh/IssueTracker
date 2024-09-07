@@ -1,44 +1,42 @@
 {
-    "version": "0.2.0",
-    "compounds": [
-      {
-        "name": "Launch All",
-        "configurations": [
-          "Launch ASP.NET Core API",
-          "Launch Angular SPA"
-        ]
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Launch All",
+      "configurations": [
+        "Launch ASP.NET Core API",
+        "Launch Angular SPA"
+      ]
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Launch ASP.NET Core API",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/IssueTracker.Api/bin/Debug/net8.0/IssueTracker.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/IssueTracker.Api",
+      "stopAtEntry": false,
+      // "serverReadyAction": {
+      //   "action": "openExternally",
+      //   "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      // },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
       }
-    ],
-    "configurations": [
-      {
-        "name": "Launch ASP.NET Core API",
-        "type": "coreclr",
-        "request": "launch",
-        "preLaunchTask": "build",
-        "program": "${workspaceFolder}/IssueTracker.Api/bin/Debug/net8.0/IssueTracker.dll",
-        "args": [],
-        "cwd": "${workspaceFolder}/IssueTracker.Api",
-        "stopAtEntry": false,
-        // "serverReadyAction": {
-        //   "action": "openExternally",
-        //   "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-        // },
-        "env": {
-          "ASPNETCORE_ENVIRONMENT": "Development"
-        },
-        "sourceFileMap": {
-          "/Views": "${workspaceFolder}/Views"
-        }
-      }
-      ,
-      {
-        "name": "Launch Angular SPA",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:4200",
-        "webRoot": "${workspaceFolder}/IssueTracker.Spa",
-        "preLaunchTask": "npm: start --prefix IssueTracker.Spa"
-      }
-    ]
-  }
-  
+    },
+    {
+      "name": "Launch Angular SPA",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/IssueTracker.Spa",
+      "preLaunchTask": "npm: start --prefix IssueTracker.Spa"
+    }
+  ]
+}

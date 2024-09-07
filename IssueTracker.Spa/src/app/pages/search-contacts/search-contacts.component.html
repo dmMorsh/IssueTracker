@@ -1,10 +1,6 @@
 <form>
-    <input type="text" 
-    placeholder="..." 
-    #searchInput
-    [ngClass]="{'expanded': isExpanded}" 
-    (focus)="expand()" 
-    id="searchInput">
+    <input type="text" placeholder="..." #searchInput [ngClass]="{'expanded': isExpanded}" (focus)="expand()"
+        id="searchInput">
     <button type="submit" (click)="search(searchInput.value); searchInput.value = ''"></button>
 </form>
 
@@ -19,8 +15,8 @@
     <tbody>
         <tr *ngFor="let item of users">
             <td>{{ (item.username) }}</td>
-            <td><button class="btn" (click)="watchInfo(item)" >🔎</button></td>
-            <td><button class="btn" (click)="subscribe(item)" >🪢</button></td>
+            <td><button class="btn" (click)="watchInfo(item)">🔎</button></td>
+            <td><button class="btn" (click)="subscribe(item)">🪢</button></td>
         </tr>
     </tbody>
 </table>

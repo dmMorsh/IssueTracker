@@ -27,16 +27,15 @@ public class ChatHub : Hub
         };
         var success = await _messagesService.Add(returnMessage);
         if (success)
-        await Clients.Group(m.chatId.ToString()).SendAsync("ReceiveMessage", returnMessage);
+            await Clients.Group(m.chatId.ToString()).SendAsync("ReceiveMessage", returnMessage);
     }
 
     public override async Task OnConnectedAsync()
     {
         var chatId = Context.GetHttpContext()!.Request.Query["chatId"];
         if (!string.IsNullOrEmpty(chatId))
-        {
             await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());
-        }
+
         await base.OnConnectedAsync();
     }
 }

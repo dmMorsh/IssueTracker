@@ -7,7 +7,7 @@ namespace IssueTracker.Dal.Services;
 public class MessagesService
 {
     private readonly ApplicationDbContext _context;
-    
+
     public MessagesService(ApplicationDbContext context)
     {
         _context = context;
@@ -26,7 +26,7 @@ public class MessagesService
         var messages = await _context.messages
             .Where(m => m.chatId == id)
             .OrderByDescending(m => m.id)
-            .ToListAsync();        
+            .ToListAsync();
         return messages;
     }
 
@@ -40,7 +40,8 @@ public class MessagesService
     public async Task<bool> Update(int id, UserMessage item)
     {
         var _item = await _context.messages.FirstOrDefaultAsync(o => o.id == id);
-        if (_item == null) return false;
+        if (_item == null)
+            return false;
         _context.Update(item);
         await _context.SaveChangesAsync();
         return true;
@@ -49,14 +50,10 @@ public class MessagesService
     public async Task<bool> Remove(int id)
     {
         var item = await _context.messages.FirstOrDefaultAsync(o => o.id == id);
-        if (item != null)
-        {
-            _context.messages.Remove(item);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        else
+        if (item == null)
             return false;
+        _context.messages.Remove(item);
+        await _context.SaveChangesAsync();
+        return true;
     }
-
 }

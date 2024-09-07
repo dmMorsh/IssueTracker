@@ -10,7 +10,7 @@ public static class ExtensionMapping
     {
         return destinationMember.Aggregate(createmap, (current, includeMember) => current.ForMember(includeMember, opt => opt.Ignore()));
     }
-} 
+}
 
 public class MappingProfile : Profile
 {
@@ -38,10 +38,9 @@ public class MappingProfile : Profile
             .ForMember(dst => dst.creatorId, opt => opt.MapFrom(srs => srs.creator.Id))
             .ForMember(dst => dst.executor, opt => opt
                 .MapFrom(srs => srs.executor != null ? srs.executor.UserName : "")
-                )
+            )
             .ForMember(dst => dst.executorId, opt => opt
                 .MapFrom(srs => srs.executor != null ? srs.executor.Id : new Guid())
-                );
-
+            );
     }
 }

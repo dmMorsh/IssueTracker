@@ -4,5 +4,5 @@ namespace IssueTracker.Dal.Models;
 
 public class ApplicationRole : IdentityRole<Guid>
 {
-    
+
 }

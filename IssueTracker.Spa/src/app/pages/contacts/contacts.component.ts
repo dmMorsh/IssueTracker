@@ -16,16 +16,16 @@ export class ContactsComponent implements OnInit {
   users: IUser[] = [];//{id, username}
   chatId = 0;
 
-  constructor(private uService: UsersService, private cService: ChatsService, private router: Router) {}
+  constructor(private uService: UsersService, private cService: ChatsService, private router: Router) { }
 
   ngOnInit() {
-      this.userId = localStorage.getItem('userId')!;
-      this.getUsers();
+    this.userId = localStorage.getItem('userId')!;
+    this.getUsers();
   }
-  
+
   writeMsg(user: IUser) {
     this.cService.getChatId(user.id).subscribe(str => {
-      if(str){
+      if (str) {
         this.router.navigate(['/personalChat', str, this.userId]);
       }
     })
@@ -34,8 +34,8 @@ export class ContactsComponent implements OnInit {
   watchInfo(user: IUser) {
     throw new Error('Method not implemented.');
   }
-  
-  getUsers(){
+
+  getUsers() {
     this.uService.getAll().subscribe(str => {
       var _str = JSON.stringify(str);
       var parsedJson: any[] = JSON.parse(_str);

@@ -26,8 +26,8 @@ public class AuthorisationController : ControllerBase
     private Dictionary<string, string> _authOptions;
 
     public AuthorisationController(
-        UserManager<ApplicationUser> userManager
-        , IConfiguration config
+        UserManager<ApplicationUser> userManager,
+        IConfiguration config
         )
     {
         _userManager = userManager;
@@ -42,16 +42,16 @@ public class AuthorisationController : ControllerBase
     {
         var user = await _userManager.FindByNameAsync(model.Login);
         if (user != null)
-        {
-            return BadRequest(new { message = "User already exists"});
-        }
+            return BadRequest(new { message = "User already exists" });
+
         var appUser = new ApplicationUser();
         appUser.UserName = model.Login;
-        
+
         var result = await _userManager.CreateAsync(appUser, model.Password);
         if (result.Succeeded)
             await _userManager.AddToRoleAsync(appUser, "User");
-        else return BadRequest(new { message = "Something went wrong"});
+        else
+            return BadRequest(new { message = "Something went wrong" });
 
         string userName = appUser.UserName;
         var claims = new List<Claim> {
@@ -83,18 +83,15 @@ public class AuthorisationController : ControllerBase
     public async Task<IActionResult> Auth(LoginDto model)
     {
         ApplicationUser? user = await _userManager.FindByNameAsync(model.Login);
-        if (user != null && user.PasswordHash != null) { 
+        if (user != null && user.PasswordHash != null)
+        {
             var pass = user.PasswordHash;
             var vali = _userManager.PasswordHasher.VerifyHashedPassword(user, pass, model.Password);
             if (vali != PasswordVerificationResult.Success)
-            {
-                return BadRequest(new { message = "Authorisation error: wrong password"});
-            }
+                return BadRequest(new { message = "Authorisation error: wrong password" });
         }
         else
-        {
             return BadRequest(new { message = "Authorisation error: user doesn't exist" });
-        }
 
         string username = model.Login;
         var claims = new List<Claim> {
@@ -102,7 +99,7 @@ public class AuthorisationController : ControllerBase
             new Claim(ClaimTypes.Role, "User"),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
-        
+
         var _token = GenerateAccessToken(claims);
         var newRefreshToken = GenerateRefreshToken();
         user.RefreshToken = newRefreshToken;
@@ -132,7 +129,8 @@ public class AuthorisationController : ControllerBase
     [Route("refresh-token")]
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest) {
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+    {
 
         var principal = GetPrincipalFromExpiredToken(refreshTokenRequest.accessToken);
         var username = principal.Identity.Name; // Получаем имя пользователя из токена
@@ -140,10 +138,10 @@ public class AuthorisationController : ControllerBase
         var user = await _userManager.FindByNameAsync(username);
 
         if (user == null
-            || user.RefreshToken != refreshTokenRequest.refreshToken
-            || user.RefreshTokenExpiry <= DateTime.UtcNow)
+        || user.RefreshToken != refreshTokenRequest.refreshToken
+        || user.RefreshTokenExpiry <= DateTime.UtcNow)
         {
-            return BadRequest(new { message = "Invalid refresh token"});
+            return BadRequest(new { message = "Invalid refresh token" });
         }
 
         var newAccessToken = GenerateAccessToken(principal.Claims);
@@ -197,12 +195,12 @@ public class AuthorisationController : ControllerBase
 
         var principal = tokenHandler.ValidateToken(_token, tokenValidationParameters, out securityToken);
         var jwtSecurityToken = securityToken as JwtSecurityToken;
-        if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        if (jwtSecurityToken == null
+        || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
         {
             throw new SecurityTokenException("Invalid token");
         }
 
         return principal;
     }
-
 }

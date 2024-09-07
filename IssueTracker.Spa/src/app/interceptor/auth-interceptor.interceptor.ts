@@ -12,8 +12,8 @@ import { AuthService } from '../services/auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authService: AuthService) {}
-  
+  constructor(private authService: AuthService) { }
+
   //refresh token if expired
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  
+
     var at = request.headers.get("Authorization")! || ""
     return this.authService.refreshToken(at).pipe(
       switchMap((obj) => {
@@ -36,7 +36,8 @@ export class AuthInterceptor implements HttpInterceptor {
           setHeaders: {
             Accept: "application/json",
             Authorization: `Bearer ${obj.token}`
-          }})
+          }
+        })
         return next.handle(request);
       }),
       catchError((error) => {

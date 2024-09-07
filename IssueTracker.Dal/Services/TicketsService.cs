@@ -5,11 +5,11 @@ using AutoMapper;
 
 namespace IssueTracker.Dal.Services;
 
-public class TicketsService 
+public class TicketsService
 {
     private readonly IMapper _mapper;
     private readonly ApplicationDbContext _context;
-    
+
     public TicketsService(
         ApplicationDbContext context
         , IMapper mapper
@@ -79,7 +79,7 @@ public class TicketsService
                 .ToList()
         });
     }
-    
+
     public async Task<Tuple<IEnumerable<TicketDto>, int>> GetPage(int page, int pageSize)
     {
         var tickets = _context.tickets
@@ -87,9 +87,9 @@ public class TicketsService
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking();
-        var ticketDtos = MakeDto(tickets);    
-        return new Tuple<IEnumerable<TicketDto>, int>( await ticketDtos.ToListAsync()
-            , await _context.tickets.CountAsync());
+        var ticketDtos = MakeDto(tickets);
+        return new Tuple<IEnumerable<TicketDto>, int>(await ticketDtos.ToListAsync(),
+            await _context.tickets.CountAsync());
     }
 
     public async Task<Tuple<IEnumerable<TicketDto>, int>> GetWatchingPage(Guid userGuid, int page, int pageSize)
@@ -101,9 +101,9 @@ public class TicketsService
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking();
-        var ticketDtos = MakeDto(tickets);    
-        return new Tuple<IEnumerable<TicketDto>, int>( await ticketDtos.ToListAsync()
-            , await _context.watchList.Where(i => i.UserId.Equals(userGuid)).CountAsync());
+        var ticketDtos = MakeDto(tickets);
+        return new Tuple<IEnumerable<TicketDto>, int>(await ticketDtos.ToListAsync(),
+            await _context.watchList.Where(i => i.UserId.Equals(userGuid)).CountAsync());
     }
 
     public async Task<Tuple<IEnumerable<TicketDto>, int>> GetExecutingPage(Guid userGuid, int page, int pageSize)
@@ -115,9 +115,9 @@ public class TicketsService
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking();
-        var ticketDtos = MakeDto(tickets);    
-        return new Tuple<IEnumerable<TicketDto>, int>( await ticketDtos.ToListAsync()
-            , await _context.executionList.Where(i => i.UserId.Equals(userGuid)).CountAsync());
+        var ticketDtos = MakeDto(tickets);
+        return new Tuple<IEnumerable<TicketDto>, int>(await ticketDtos.ToListAsync(),
+            await _context.executionList.Where(i => i.UserId.Equals(userGuid)).CountAsync());
     }
 
     public async Task<TicketDto> Add(TicketDto ticketDto)
@@ -130,7 +130,7 @@ public class TicketsService
         {
             ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.executorId));
             if (_executor != null)
-            ticket.executor = _executor;
+                ticket.executor = _executor;
         }
         ticket.creator = _creator;
         await _context.tickets.AddAsync(ticket);
@@ -145,7 +145,8 @@ public class TicketsService
             .Include(i => i.executionList)
             .Include(i => i.watchList)
             .FirstOrDefaultAsync(o => o.id == id);
-        if(_ticket == null) return false;
+        if (_ticket == null)
+            return false;
         var ticket = _mapper.Map<Ticket>(ticketDto);
         ApplicationUser? _creator = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.creatorId));
         if (ticket == null || _creator == null)
@@ -154,7 +155,7 @@ public class TicketsService
         {
             ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.executorId));
             if (_executor != null)
-            ticket.executor = _executor;
+                ticket.executor = _executor;
         }
         ticket.creator = _creator;
         _mapper.Map(ticket, _ticket);
@@ -169,5 +170,4 @@ public class TicketsService
         await _context.SaveChangesAsync();
         return true;
     }
-
 }

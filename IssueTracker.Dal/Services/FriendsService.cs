@@ -4,10 +4,10 @@ using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Dal.Services;
 
-public class FriendsService 
+public class FriendsService
 {
     private readonly ApplicationDbContext _context;
-    
+
     public FriendsService(ApplicationDbContext context)
     {
         _context = context;
@@ -40,16 +40,18 @@ public class FriendsService
             .Include(f => f.Subscriptions)
             .FirstOrDefaultAsync(u => u.Id == friendId);
 
-        if (ourUser == null || friend == null) 
+        if (ourUser == null || friend == null)
             return false;
 
         if (ourUser.FriendRequests.Contains(friend))
             ourUser.FriendRequests.Remove(friend);
-        else return false;
+        else
+            return false;
 
         if (friend.Subscriptions.Contains(ourUser))
             friend.Subscriptions.Remove(ourUser);
-        else return false;
+        else
+            return false;
 
         if (!ourUser.Friends.Contains(friend))
             ourUser.Friends.Add(friend);
@@ -73,7 +75,7 @@ public class FriendsService
             .Include(f => f.Subscriptions)
             .FirstOrDefaultAsync(u => u.Id == friendId);
 
-        if (ourUser == null || friend == null) 
+        if (ourUser == null || friend == null)
             return false;
 
         if (!ourUser.FriendRequests.Contains(friend))
@@ -91,5 +93,4 @@ public class FriendsService
         await _context.SaveChangesAsync();
         return true;
     }
-
 }

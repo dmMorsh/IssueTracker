@@ -14,7 +14,7 @@ export class SearchContactsComponent {
   users: IUser[] = [];
   isExpanded = false;
 
-  constructor(private uService: UsersService, private router: Router) {}
+  constructor(private uService: UsersService, private router: Router) { }
 
   watchInfo(_t17: IUser) {
     throw new Error('Method not implemented.');
@@ -24,11 +24,11 @@ export class SearchContactsComponent {
     this.isExpanded = true;
   }
 
-  search(user: string) {  
-    if(user == "") return;
+  search(user: string) {
+    if (user == "") return;
     this.isExpanded = false;
     this.users = [];
-    this.uService.getByName(user).subscribe(str => {      
+    this.uService.getByName(user).subscribe(str => {
       var _str = JSON.stringify(str);
       var parsedJson: IUser[] = JSON.parse(_str);
       this.users = this.users.concat(parsedJson);
@@ -37,6 +37,6 @@ export class SearchContactsComponent {
 
   subscribe(friend: IUser) {
     this.uService.subscribe(friend).subscribe(str => {
-    })  
+    })
   }
 }

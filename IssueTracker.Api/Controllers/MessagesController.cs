@@ -19,13 +19,6 @@ public class MessagesController : ControllerBase
         _messagesService = messagesService;
     }
 
-    // [HttpGet]
-    // public async Task<IActionResult> Get()
-    // {
-    //     var items = await _messagesService.Get();
-    //     return Ok(items);
-    // }
-
     [HttpGet("getById")]
     public async Task<IActionResult> getById([FromQuery] int id)
     {
@@ -60,9 +53,6 @@ public class MessagesController : ControllerBase
         if (success)
             return Ok();
         else
-            return BadRequest(new {message = "bad request"});
+            return BadRequest(new { message = "bad request" });
     }
-
-
-
 }

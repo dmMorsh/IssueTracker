@@ -10,13 +10,13 @@ export class ChatsService {
     private apiUrl: string;
     constructor(private http: HttpClient) {
         this.apiUrl = `${API_URL}`;
-     }
+    }
 
     getAll() {
         return this.http.get<string>(`${this.apiUrl}/Chats`);
     }
 
-    getChatId(id: string){
+    getChatId(id: string) {
         return this.http.get(`${this.apiUrl}/Chats/getChatId?userId=${id}`);
     }
 
@@ -24,16 +24,15 @@ export class ChatsService {
         return this.http.get<Array<IUser>>(`${this.apiUrl}/Chats/getGuysById?id=${id}`);
     }
 
-    create(item: IChat){        
+    create(item: IChat) {
         return this.http.post<string>(`${this.apiUrl}/Chats`, item);
     }
 
-    update(item: IChat){
+    update(item: IChat) {
         return this.http.put<string>(`${this.apiUrl}/Chats/${item.id}`, item);
     }
 
-    delete(item: IChat){
+    delete(item: IChat) {
         return this.http.delete(`${this.apiUrl}/Chats/${item.id}`);
-    }    
-
+    }
 }

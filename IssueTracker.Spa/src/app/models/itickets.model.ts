@@ -22,10 +22,9 @@ export interface ITicket {
   executionList: Array<IExecutionList>,
   watchList: Array<IWatchList>,
   comments: Array<ITicketComment>
-  
 }
 
-export interface ITicketComment{
+export interface ITicketComment {
 
   id: number,
   ticketId: number,
@@ -33,20 +32,18 @@ export interface ITicketComment{
   createDate: Date,
   description: string,
   edited: boolean
-
 }
 
-export interface IExecutionList{
+export interface IExecutionList {
 
   userId: string,
-  ticketId: number, 
+  ticketId: number,
   userName?: string
-
 }
-export interface IWatchList{
+
+export interface IWatchList {
 
   userId: string,
-  ticketId: number, 
+  ticketId: number,
   userName?: string
-
 }

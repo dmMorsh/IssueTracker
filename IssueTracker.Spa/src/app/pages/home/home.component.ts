@@ -7,10 +7,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 })
 
 export class HomeComponent implements OnInit, OnDestroy {
- 
+
   private audio: HTMLAudioElement;
 
-  constructor(){
+  constructor() {
     this.audio = new Audio('./../../assets/audio/Untitled1.m4a');
   }
 
@@ -21,8 +21,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.stopPlayback();
   }
-  
-  playAudio(){
+
+  playAudio() {
     this.audio.loop = true;
     this.audio.load();
     this.audio.play();

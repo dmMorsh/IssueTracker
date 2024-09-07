@@ -13,15 +13,15 @@ export class ChatsComponent implements OnInit {
   userId: string = "00000000-0000-0000-0000-000000000000";
   chats: IChat[] = [];
 
-  constructor(private cService: ChatsService, private router: Router) {}
+  constructor(private cService: ChatsService, private router: Router) { }
 
   ngOnInit(): void {
     this.userId = localStorage.getItem('userId')!;
     this.getChats();
   }
 
-  getChats(){
-    this.cService.getAll().subscribe(str => {      
+  getChats() {
+    this.cService.getAll().subscribe(str => {
       var _str = JSON.stringify(str);
       var parsedJson: any[] = JSON.parse(_str);
       this.chats = this.chats.concat(parsedJson);
@@ -29,6 +29,6 @@ export class ChatsComponent implements OnInit {
   }
 
   writeMsg(chat: IChat) {
-    this.router.navigate(['/personalChat', chat.id, this.userId]);    
+    this.router.navigate(['/personalChat', chat.id, this.userId]);
   }
 }

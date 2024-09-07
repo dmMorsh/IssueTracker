@@ -18,26 +18,26 @@ export class TicketsService {
     }
 
     getPage(page: number, pageSize: number = 10) {
-        return this.http.get<{totalPages: number, tickets: ITicket[]}>(`${this.apiUrl}/Tickets/page?page=${page}&pageSize=${pageSize}`);
+        return this.http.get<{ totalPages: number, tickets: ITicket[] }>(`${this.apiUrl}/Tickets/page?page=${page}&pageSize=${pageSize}`);
     }
 
     getWatchingPage(page: number, pageSize: number = 10) {
-        return this.http.get<{totalPages: number, tickets: ITicket[]}>(`${this.apiUrl}/Tickets/watching/page?page=${page}&pageSize=${pageSize}`);
+        return this.http.get<{ totalPages: number, tickets: ITicket[] }>(`${this.apiUrl}/Tickets/watching/page?page=${page}&pageSize=${pageSize}`);
     }
 
     getExecutingPage(page: number, pageSize: number = 10) {
-        return this.http.get<{totalPages: number, tickets: ITicket[]}>(`${this.apiUrl}/Tickets/executing/page?page=${page}&pageSize=${pageSize}`);
+        return this.http.get<{ totalPages: number, tickets: ITicket[] }>(`${this.apiUrl}/Tickets/executing/page?page=${page}&pageSize=${pageSize}`);
     }
 
-    create(item: ITicket){
+    create(item: ITicket) {
         return this.http.post<string>(`${this.apiUrl}/Tickets`, item);
     }
 
-    update(item: ITicket){
+    update(item: ITicket) {
         return this.http.put<string>(`${this.apiUrl}/Tickets/${item.id}`, item);
     }
 
-    delete(item: ITicket){
+    delete(item: ITicket) {
         return this.http.delete(`${this.apiUrl}/Tickets/${item.id}`);
     }
 }

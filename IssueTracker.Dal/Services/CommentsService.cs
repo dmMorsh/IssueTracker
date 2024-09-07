@@ -5,11 +5,11 @@ using AutoMapper;
 
 namespace IssueTracker.Dal.Services;
 
-public class CommentsService 
+public class CommentsService
 {
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
-    
+
     public CommentsService(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
@@ -35,7 +35,8 @@ public class CommentsService
     public async Task<bool> Update(int id, TicketCommentDto itemDto)
     {
         var _item = await _context.comments.FirstOrDefaultAsync(o => o.id == id);
-        if(_item == null) return false;
+        if (_item == null)
+            return false;
         var item = _mapper.Map<TicketComment>(itemDto);
         _mapper.Map(item, _item);
         await _context.SaveChangesAsync();
@@ -45,13 +46,11 @@ public class CommentsService
     public async Task<bool> Remove(int id)
     {
         var item = await _context.comments.FirstOrDefaultAsync(o => o.id == id);
-        if (item != null) 
-        {
-            _context.comments.Remove(item);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        return false;
+        if (item == null)
+            return false;
+        _context.comments.Remove(item);
+        await _context.SaveChangesAsync();
+        return true;
     }
 
 }

@@ -11,41 +11,41 @@ export class UsersService {
 
     constructor(private http: HttpClient) {
         this.apiUrl = `${API_URL}`;
-     }
+    }
 
     getAll() {
         return this.http.get<string>(`${this.apiUrl}/Friends`);
     }
 
-    getFriendRequests(){
+    getFriendRequests() {
         return this.http.get<string>(`${this.apiUrl}/Friends/friendRequests`);
     }
 
-    getSubscriptions(){
+    getSubscriptions() {
         return this.http.get<string>(`${this.apiUrl}/Friends/subscriptions`);
     }
 
-    getFriend(item: IUser){
+    getFriend(item: IUser) {
         return this.http.post<string>(`${this.apiUrl}/Friends`, { id: item.id });
     }
 
-    subscribe(item: IUser){
+    subscribe(item: IUser) {
         return this.http.post<string>(`${this.apiUrl}/Friends/subscribe`, { id: item.id });
     }
 
-    unsubscribe(item: IUser){
+    unsubscribe(item: IUser) {
         return this.http.post<string>(`${this.apiUrl}/Friends/unsubscribe`, { id: item.id });
     }
 
-    update(item: IUser){
+    update(item: IUser) {
         return this.http.put<string>(`${this.apiUrl}/Users/${item.id}`, item);
     }
 
-    delete(item: IUser){
+    delete(item: IUser) {
         return this.http.delete(`${this.apiUrl}/Users/${item.id}`);
     }
 
-    getByName(name: string){
+    getByName(name: string) {
         return this.http.get(`${this.apiUrl}/Users/getByName?userName=${name}`);
     }
 }

@@ -4,10 +4,10 @@ using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Dal.Services;
 
-public class UsersService 
+public class UsersService
 {
     private readonly ApplicationDbContext _context;
-    
+
     public UsersService(ApplicationDbContext context)
     {
         _context = context;
@@ -52,5 +52,4 @@ public class UsersService
     {
         return await FindById(new Guid(userId));
     }
-
 }

@@ -18,51 +18,51 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     title: 'Home',
-  },{
+  }, {
     path: 'contacts',
     component: ContactsComponent,
     title: 'contacts'
-  },{
+  }, {
     path: 'search-contacts',
     component: SearchContactsComponent,
     title: 'search-contacts'
-  },{
+  }, {
     path: 'riend-requests',
     component: FriendRequestsComponent,
     title: 'riend-requests'
-  },{
+  }, {
     path: 'im-following',
     component: ImFollowingComponent,
     title: 'im-following'
-  },{
+  }, {
     path: 'login',
     component: LoginComponent,
     title: 'login'
-  },{
+  }, {
     path: 'weather',
     component: WeatherComponent,
     title: 'Weather'
-  },{
+  }, {
     path: 'chats',
     component: ChatsComponent,
     title: 'chats'
-  },{
+  }, {
     path: 'tickets',
     component: TicketsComponent,
     title: 'tickets'
-  },{
+  }, {
     path: 'tickets-watching',
     component: TicketsWathcingComponent,
     title: 'tickets-watching'
-  },{
+  }, {
     path: 'tickets-executing',
     component: TicketsExecutingComponent,
     title: 'tickets-executing'
-  },{
+  }, {
     path: 'personalChat/:chatId/:userId',
     component: PersonalChatComponent,
     title: 'chat'
-  },{
+  }, {
     path: '**',
     component: HomeComponent,
     redirectTo: ''

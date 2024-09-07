@@ -9,17 +9,17 @@ import { Router } from '@angular/router';
   styleUrl: './friend-requests.component.scss'
 })
 
-export class FriendRequestsComponent implements OnInit{
+export class FriendRequestsComponent implements OnInit {
 
   users: IUser[] = [];
 
-  constructor(private uService: UsersService, private router: Router) {}
+  constructor(private uService: UsersService, private router: Router) { }
 
   ngOnInit(): void {
     this.getFriendRequests();
   }
 
-  getFriendRequests(){
+  getFriendRequests() {
     this.uService.getFriendRequests().subscribe(str => {
       var _str = JSON.stringify(str);
       var parsedJson: IUser[] = JSON.parse(_str);
@@ -30,10 +30,10 @@ export class FriendRequestsComponent implements OnInit{
   addFriend(friend: IUser) {
 
     this.uService.getFriend(friend).subscribe(str => {
-      if(str == "OK"){
+      if (str == "OK") {
         var i = this.users.indexOf(friend);
-        if(i !== -1){
-          this.users.splice(i,1);
+        if (i !== -1) {
+          this.users.splice(i, 1);
         }
       }
     })

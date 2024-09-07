@@ -8,11 +8,11 @@ using IssueTracker.Hubs;
 
 namespace IssueTracker.Controllers;
 
-public class IID 
+public class IID
 {
-    public string id { get; set; } 
+    public string id { get; set; }
 }
-    
+
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ServiceFilter(typeof(UserGuidFilter))]
 [ApiController]
@@ -25,8 +25,8 @@ public class FriendsController : ControllerBase
 
     public FriendsController(
         FriendsService friendsService,
-        FriendsSubscriptionsService subscriptionsService, 
-        IHubContext<ChatHub> hubContext    
+        FriendsSubscriptionsService subscriptionsService,
+        IHubContext<ChatHub> hubContext
         )
     {
         _friendsService = friendsService;
@@ -42,12 +42,13 @@ public class FriendsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Guid userGuid, [FromBody] IID friendid )
+    public async Task<IActionResult> Create(Guid userGuid, [FromBody] IID friendid)
     {
         var success = await _friendsService.Add(userGuid, new Guid(friendid.id));
         if (success)
-        return Ok("OK");
-        return BadRequest(ModelState);
+            return Ok("OK");
+        else
+            return BadRequest(ModelState);
     }
 
     [HttpGet("friendRequests")]
@@ -71,8 +72,9 @@ public class FriendsController : ControllerBase
 
         var success = await _subscriptionsService.Subscribe(userGuid, new Guid(friendid.id));
         if (success)
-        return Ok("OK");
-        return BadRequest(ModelState);
+            return Ok("OK");
+        else
+            return BadRequest(ModelState);
     }
 
     [HttpPost("unsubscribe")]
@@ -80,7 +82,8 @@ public class FriendsController : ControllerBase
     {
         var success = await _subscriptionsService.Unsubscribe(userGuid, new Guid(friendid.id));
         if (success)
-        return Ok("OK");
-        return BadRequest(ModelState);
+            return Ok("OK");
+        else
+            return BadRequest(ModelState);
     }
 }

@@ -20,7 +20,6 @@ public class Ticket
     public ICollection<ExecutionList>? executionList { get; set; }
     public ICollection<WatchList>? watchList { get; set; }
     public virtual ICollection<TicketComment> comments { get; set; } = new List<TicketComment>();
-
 }
 
 public class TicketDto
@@ -46,5 +45,4 @@ public class TicketDto
     public ICollection<ExecutionListDto>? executionList { get; set; }
     public ICollection<WatchListDto>? watchList { get; set; }
     public ICollection<TicketCommentDto> comments { get; set; } = new List<TicketCommentDto>();
-
 }

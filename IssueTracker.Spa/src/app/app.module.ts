@@ -38,14 +38,14 @@ import { TicketsExecutingComponent } from './pages/tickets-executing/tickets-exe
     NavigationComponent,
     LoginComponent,
     WeatherComponent,
-    TicketsComponent, 
-    EditTicketsComponent, 
-    PersonalChatComponent, 
-    ChatsComponent, 
-    SearchContactsComponent, 
-    FriendRequestsComponent, 
-    ImFollowingComponent, 
-    TicketsWathcingComponent, 
+    TicketsComponent,
+    EditTicketsComponent,
+    PersonalChatComponent,
+    ChatsComponent,
+    SearchContactsComponent,
+    FriendRequestsComponent,
+    ImFollowingComponent,
+    TicketsWathcingComponent,
     TicketsExecutingComponent,
   ],
   imports: [
@@ -66,10 +66,12 @@ import { TicketsExecutingComponent } from './pages/tickets-executing/tickets-exe
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }, 
-    { provide: HTTP_INTERCEPTORS, 
-      useClass: AuthInterceptor, 
-      multi: true },
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     DatePipe
   ],
   bootstrap: [AppComponent]

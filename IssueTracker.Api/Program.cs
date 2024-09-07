@@ -52,7 +52,7 @@ builder.Services
                 if (path.StartsWithSegments("/api/chathub"))
                 {
                     var accessToken = context.Request.Query["access_token"];
-                    if(!string.IsNullOrEmpty(accessToken))
+                    if (!string.IsNullOrEmpty(accessToken))
                         context.Token = accessToken;
                 }
                 return Task.CompletedTask;
@@ -63,7 +63,9 @@ builder.Services.AddAuthorization();
 
 //CORS
 string? frontUrl = builder.Configuration["Frontend:URL"];
-if (!string.IsNullOrEmpty(frontUrl)){frontUrl = "http://localhost:4200";}
+if (!string.IsNullOrEmpty(frontUrl))
+    frontUrl = "http://localhost:4200";
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.
     AddCors(options =>
@@ -110,7 +112,7 @@ app.MapHub<ChatHub>("api/chathub");
 
 app.MapControllers();
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
     var roles = new[] { "Admin", "User" };
