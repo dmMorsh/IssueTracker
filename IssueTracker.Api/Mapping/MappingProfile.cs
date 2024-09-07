@@ -19,28 +19,28 @@ public class MappingProfile : Profile
         CreateMap<ExecutionList, ExecutionList>();
         CreateMap<ExecutionListDto, ExecutionList>();
         CreateMap<ExecutionList, ExecutionListDto>()
-            .ForMember(m => m.userName, opt => opt.MapFrom(srs => srs.User.UserName));
+            .ForMember(m => m.UserName, opt => opt.MapFrom(srs => srs.User.UserName));
 
         CreateMap<WatchList, WatchList>();
         CreateMap<WatchListDto, WatchList>();
         CreateMap<WatchList, WatchListDto>()
-            .ForMember(m => m.userName, opt => opt.MapFrom(srs => srs.User.UserName));
+            .ForMember(m => m.UserName, opt => opt.MapFrom(srs => srs.User.UserName));
 
         CreateMap<TicketComment, TicketCommentDto>().ReverseMap();
 
         CreateMap<Ticket, Ticket>();
 
         CreateMap<TicketDto, Ticket>()
-            .Ignore(s => s.creator, s => s.executor);
+            .Ignore(s => s.Creator, s => s.Executor);
 
         CreateMap<Ticket, TicketDto>()
-            .ForMember(dst => dst.creator, opt => opt.MapFrom(srs => srs.creator.UserName))
-            .ForMember(dst => dst.creatorId, opt => opt.MapFrom(srs => srs.creator.Id))
-            .ForMember(dst => dst.executor, opt => opt
-                .MapFrom(srs => srs.executor != null ? srs.executor.UserName : "")
+            .ForMember(dst => dst.Creator, opt => opt.MapFrom(srs => srs.Creator.UserName))
+            .ForMember(dst => dst.CreatorId, opt => opt.MapFrom(srs => srs.Creator.Id))
+            .ForMember(dst => dst.Executor, opt => opt
+                .MapFrom(srs => srs.Executor != null ? srs.Executor.UserName : "")
             )
-            .ForMember(dst => dst.executorId, opt => opt
-                .MapFrom(srs => srs.executor != null ? srs.executor.Id : new Guid())
+            .ForMember(dst => dst.ExecutorId, opt => opt
+                .MapFrom(srs => srs.Executor != null ? srs.Executor.Id : new Guid())
             );
     }
 }

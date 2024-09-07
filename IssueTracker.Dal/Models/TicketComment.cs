@@ -1,23 +1,21 @@
 namespace IssueTracker.Dal.Models;
 public class TicketComment
 {
-    public int id { get; set; }
-    public string creator { get; set; } = "";
-    public DateTime createDate { get; set; }
-    public string description { get; set; } = "";
-    public bool edited { get; set; }
-
-    public int ticketId { get; set; }
-    public Ticket ticket { get; set; }
+    public int Id { get; set; }
+    public string Creator { get; set; } = "";
+    public DateTime CreateDate { get; set; }
+    public string Description { get; set; } = "";
+    public bool Edited { get; set; }
+    public int TicketId { get; set; }
+    public Ticket Ticket { get; set; }
 }
 
 public class TicketCommentDto
 {
-    public int id { get; set; }
-    public string creator { get; set; } = "";
-    public DateTime createDate { get; set; }
-    public string description { get; set; } = "";
-    public bool edited { get; set; }
-
-    public int ticketId { get; set; }
+    public int Id { get; set; }
+    public string Creator { get; set; } = "";
+    public DateTime CreateDate { get; set; }
+    public string Description { get; set; } = "";
+    public bool Edited { get; set; }
+    public int TicketId { get; set; }
 }

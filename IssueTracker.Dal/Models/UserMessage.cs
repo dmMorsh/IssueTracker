@@ -1,9 +1,9 @@
 namespace IssueTracker.Dal.Models;
 public class UserMessage
 {
-    public int id { get; set; }
-    public int chatId { get; set; }
-    public required string sender { get; set; }
-    public required string message { get; set; }
-    public DateTime dateSent { get; set; }
+    public int Id { get; set; }
+    public int ChatId { get; set; }
+    public required string Sender { get; set; }
+    public required string Message { get; set; }
+    public DateTime DateSent { get; set; }
 }

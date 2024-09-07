@@ -17,17 +17,17 @@ public class ChatHub : Hub
 
     public async Task SendMessage(UserMessage m)
     {
-        m.dateSent = DateTime.UtcNow;
+        m.DateSent = DateTime.UtcNow;
         UserMessage returnMessage = new UserMessage
         {
-            chatId = m.chatId,
-            sender = m.sender,
-            message = m.message,
-            dateSent = m.dateSent
+            ChatId = m.ChatId,
+            Sender = m.Sender,
+            Message = m.Message,
+            DateSent = m.DateSent
         };
         var success = await _messagesService.Add(returnMessage);
         if (success)
-            await Clients.Group(m.chatId.ToString()).SendAsync("ReceiveMessage", returnMessage);
+            await Clients.Group(m.ChatId.ToString()).SendAsync("ReceiveMessage", returnMessage);
     }
 
     public override async Task OnConnectedAsync()

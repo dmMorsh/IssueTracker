@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Dal.Context;
-
+// to remember dotnet ef migrations add mig --startup-project ../IssueTracker.Api
+// dotnet ef database update mig --startup-project ../IssueTracker.Api
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -71,7 +72,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
         modelBuilder.Entity<ExecutionList>()
             .HasOne(e => e.Ticket)
-            .WithMany(t => t.executionList)
+            .WithMany(t => t.ExecutionList)
             .HasForeignKey(e => e.TicketId);
 
         modelBuilder.Entity<WatchList>().HasKey(u => new { u.UserId, u.TicketId });
@@ -83,7 +84,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
         modelBuilder.Entity<WatchList>()
             .HasOne(e => e.Ticket)
-            .WithMany(t => t.watchList)
+            .WithMany(t => t.WatchList)
             .HasForeignKey(e => e.TicketId);
     }
 }

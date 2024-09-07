@@ -1,6 +1,6 @@
 namespace IssueTracker.Dal.Models;
 public class Space
 {
-    public int id { get; set; }
-    public required string title { get; set; }
+    public int Id { get; set; }
+    public required string Title { get; set; }
 }

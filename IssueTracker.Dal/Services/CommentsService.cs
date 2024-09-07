@@ -34,7 +34,7 @@ public class CommentsService
 
     public async Task<bool> Update(int id, TicketCommentDto itemDto)
     {
-        var _item = await _context.comments.FirstOrDefaultAsync(o => o.id == id);
+        var _item = await _context.comments.FirstOrDefaultAsync(o => o.Id == id);
         if (_item == null)
             return false;
         var item = _mapper.Map<TicketComment>(itemDto);
@@ -45,7 +45,7 @@ public class CommentsService
 
     public async Task<bool> Remove(int id)
     {
-        var item = await _context.comments.FirstOrDefaultAsync(o => o.id == id);
+        var item = await _context.comments.FirstOrDefaultAsync(o => o.Id == id);
         if (item == null)
             return false;
         _context.comments.Remove(item);

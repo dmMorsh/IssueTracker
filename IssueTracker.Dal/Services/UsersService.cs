@@ -18,10 +18,10 @@ public class UsersService
         var users = await _context.Users
             .Select(x => new MiniUser
             {
-                id = x.Id,
-                username = x.UserName
+                Id = x.Id,
+                Username = x.UserName
             })
-            .OrderBy(item => item.id)
+            .OrderBy(item => item.Id)
             .ToListAsync();
         return users;
     }
@@ -34,8 +34,8 @@ public class UsersService
             .Take(amount)
             .Select(x => new MiniUser
             {
-                id = x.Id,
-                username = x.UserName
+                Id = x.Id,
+                Username = x.UserName
             })
             .ToListAsync();
         return users;

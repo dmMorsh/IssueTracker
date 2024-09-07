@@ -16,7 +16,7 @@ public class MessagesService
     public async Task<IEnumerable<UserMessage>> Get()
     {
         var messages = await _context.messages
-            .OrderBy(item => item.id)
+            .OrderBy(item => item.Id)
             .ToListAsync();
         return messages;
     }
@@ -24,8 +24,8 @@ public class MessagesService
     public async Task<IEnumerable<UserMessage>> getById(int id)
     {
         var messages = await _context.messages
-            .Where(m => m.chatId == id)
-            .OrderByDescending(m => m.id)
+            .Where(m => m.ChatId == id)
+            .OrderByDescending(m => m.Id)
             .ToListAsync();
         return messages;
     }
@@ -39,7 +39,7 @@ public class MessagesService
 
     public async Task<bool> Update(int id, UserMessage item)
     {
-        var _item = await _context.messages.FirstOrDefaultAsync(o => o.id == id);
+        var _item = await _context.messages.FirstOrDefaultAsync(o => o.Id == id);
         if (_item == null)
             return false;
         _context.Update(item);
@@ -49,7 +49,7 @@ public class MessagesService
 
     public async Task<bool> Remove(int id)
     {
-        var item = await _context.messages.FirstOrDefaultAsync(o => o.id == id);
+        var item = await _context.messages.FirstOrDefaultAsync(o => o.Id == id);
         if (item == null)
             return false;
         _context.messages.Remove(item);

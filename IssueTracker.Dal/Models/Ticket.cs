@@ -1,48 +1,48 @@
 namespace IssueTracker.Dal.Models;
 public class Ticket
 {
-    public int id { get; set; }
-    public Space? space { get; set; }
-    public required string title { get; set; }
-    public string? description { get; set; }
+    public int Id { get; set; }
+    public Space? Space { get; set; }
+    public required string Title { get; set; }
+    public string? Description { get; set; }
 
-    public required ApplicationUser creator { get; set; }
-    public ApplicationUser? executor { get; set; }
+    public required ApplicationUser Creator { get; set; }
+    public ApplicationUser? Executor { get; set; }
 
-    public DateTime createDate { get; set; }
-    public DateTime updatedDate { get; set; }
-    public DateTime dueDate { get; set; }
+    public DateTime CreateDate { get; set; }
+    public DateTime UpdatedDate { get; set; }
+    public DateTime DueDate { get; set; }
 
-    public typeOfIssue issueType { get; set; }
-    public statusOfTask status { get; set; }
-    public priorityOfTask priority { get; set; }
+    public typeOfIssue IssueType { get; set; }
+    public statusOfTask Status { get; set; }
+    public priorityOfTask Priority { get; set; }
 
-    public ICollection<ExecutionList>? executionList { get; set; }
-    public ICollection<WatchList>? watchList { get; set; }
-    public virtual ICollection<TicketComment> comments { get; set; } = new List<TicketComment>();
+    public ICollection<ExecutionList>? ExecutionList { get; set; }
+    public ICollection<WatchList>? WatchList { get; set; }
+    public virtual ICollection<TicketComment> Comments { get; set; } = new List<TicketComment>();
 }
 
 public class TicketDto
 {
-    public int id { get; set; }
-    public Space? space { get; set; }
-    public required string title { get; set; }
-    public string? description { get; set; }
+    public int Id { get; set; }
+    public Space? Space { get; set; }
+    public required string Title { get; set; }
+    public string? Description { get; set; }
 
-    public required string creatorId { get; set; }
-    public string? executorId { get; set; } = "";
-    public required string creator { get; set; }
-    public string? executor { get; set; } = "";
+    public required string CreatorId { get; set; }
+    public string? ExecutorId { get; set; } = "";
+    public required string Creator { get; set; }
+    public string? Executor { get; set; } = "";
 
-    public DateTime createDate { get; set; }
-    public DateTime updatedDate { get; set; }
-    public DateTime dueDate { get; set; }
+    public DateTime CreateDate { get; set; }
+    public DateTime UpdatedDate { get; set; }
+    public DateTime DueDate { get; set; }
 
-    public typeOfIssue issueType { get; set; }
-    public statusOfTask status { get; set; }
-    public priorityOfTask priority { get; set; }
+    public typeOfIssue IssueType { get; set; }
+    public statusOfTask Status { get; set; }
+    public priorityOfTask Priority { get; set; }
 
-    public ICollection<ExecutionListDto>? executionList { get; set; }
-    public ICollection<WatchListDto>? watchList { get; set; }
-    public ICollection<TicketCommentDto> comments { get; set; } = new List<TicketCommentDto>();
+    public ICollection<ExecutionListDto>? ExecutionList { get; set; }
+    public ICollection<WatchListDto>? WatchList { get; set; }
+    public ICollection<TicketCommentDto> Comments { get; set; } = new List<TicketCommentDto>();
 }

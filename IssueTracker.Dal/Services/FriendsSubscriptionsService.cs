@@ -21,8 +21,8 @@ public class FriendsSubscriptionsService
             .SelectMany(u => u.Subscriptions)
             .Select(x => new MiniUser
             {
-                id = x.Id,
-                username = x.UserName
+                Id = x.Id,
+                Username = x.UserName
             })
             .ToListAsync();
         return subscriptions;
@@ -36,8 +36,8 @@ public class FriendsSubscriptionsService
             .SelectMany(u => u.FriendRequests)
             .Select(x => new MiniUser
             {
-                id = x.Id,
-                username = x.UserName
+                Id = x.Id,
+                Username = x.UserName
             })
             .ToListAsync();
         return friendRequests;

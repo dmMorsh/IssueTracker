@@ -22,19 +22,19 @@ public class ChatsService
             .Where(c => c.Users.Contains(user))
             .Select(chat => new
             {
-                chat.id,
-                info = chat.isPersonal
+                chat.Id,
+                info = chat.IsPersonal
                     ? chat.Users
                         .Where(u => u.Id != userId)
                         .Select(u => u.UserName)
                         .FirstOrDefault()
-                    : chat.info == ""
-                        ? chat.info
+                    : chat.Info == ""
+                        ? chat.Info
                         : string.Join(", ", chat.Users.Select(u => u.UserName)),
                 lastMessage = _context.messages
-                    .Where(m => m.chatId == chat.id)
-                    .OrderByDescending(m => m.dateSent)
-                    .Select(m => m.message)
+                    .Where(m => m.ChatId == chat.Id)
+                    .OrderByDescending(m => m.DateSent)
+                    .Select(m => m.Message)
                     .FirstOrDefault()
             })
             .Where(c => c.lastMessage != null)
@@ -46,7 +46,7 @@ public class ChatsService
     {
         var chats = await _context.chats
             .Where(c => c.Users.Any(u => u.Id == userId)
-                    && c.isPersonal
+                    && c.IsPersonal
                     && c.Users.Any(u => u.Id == secondUserId))
             .ToListAsync();
 
@@ -59,24 +59,24 @@ public class ChatsService
             {
                 var newChat = new ChatEntity
                 {
-                    isPersonal = true,
+                    IsPersonal = true,
                     Users = new ApplicationUser[] { per1, per2 }
                 };
                 await _context.chats.AddAsync(newChat);
                 await _context.SaveChangesAsync();
-                return newChat.id;
+                return newChat.Id;
             }
             return null;
         }
-        return chats[0].id;
+        return chats[0].Id;
     }
 
     public async Task<IEnumerable<MiniUser>> getGuysById(int id)
     {
         var users = await _context.chats
-        .Where(chat => chat.id == id)
+        .Where(chat => chat.Id == id)
         .SelectMany(chat => chat.Users) // Выборка всех пользователей из найденного чата
-        .Select(x => new MiniUser { id = x.Id, username = x.UserName })
+        .Select(x => new MiniUser { Id = x.Id, Username = x.UserName })
         .ToListAsync();
         return users;
     }
@@ -90,7 +90,7 @@ public class ChatsService
 
     public async Task<bool> Remove(int id)
     {
-        var item = await _context.chats.FirstOrDefaultAsync(o => o.id == id);
+        var item = await _context.chats.FirstOrDefaultAsync(o => o.Id == id);
         if (item == null)
             return false;
         _context.chats.Remove(item);

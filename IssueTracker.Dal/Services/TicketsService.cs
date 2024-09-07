@@ -22,10 +22,10 @@ public class TicketsService
     public async Task<IEnumerable<Ticket>> GetAll()
     {
         var tickets = await _context.tickets
-            .Include(ticket => ticket.creator)
-            .Include(ticket => ticket.executor)
-            .Include(ticket => ticket.comments.OrderByDescending(c => c.id))
-            .OrderBy(item => item.id)
+            .Include(ticket => ticket.Creator)
+            .Include(ticket => ticket.Executor)
+            .Include(ticket => ticket.Comments.OrderByDescending(c => c.Id))
+            .OrderBy(item => item.Id)
             .AsNoTracking()
             .ToListAsync();
         return tickets;
@@ -35,46 +35,46 @@ public class TicketsService
     {
         return request.Select(ticket => new TicketDto
         {
-            id = ticket.id,
-            title = ticket.title,
-            description = ticket.description,
-            creator = ticket.creator.UserName,
-            creatorId = ticket.creator.Id.ToString(),
-            executor = ticket.executor != null ? ticket.executor.UserName : "",
-            executorId = ticket.executor != null ? ticket.executor.Id.ToString() : new Guid().ToString(),
-            createDate = ticket.createDate,
-            dueDate = ticket.dueDate,
-            issueType = ticket.issueType,
-            priority = ticket.priority,
-            space = ticket.space,
-            status = ticket.status,
-            updatedDate = ticket.updatedDate,
-            executionList = ticket.executionList
+            Id = ticket.Id,
+            Title = ticket.Title,
+            Description = ticket.Description,
+            Creator = ticket.Creator.UserName,
+            CreatorId = ticket.Creator.Id.ToString(),
+            Executor = ticket.Executor != null ? ticket.Executor.UserName : "",
+            ExecutorId = ticket.Executor != null ? ticket.Executor.Id.ToString() : new Guid().ToString(),
+            CreateDate = ticket.CreateDate,
+            DueDate = ticket.DueDate,
+            IssueType = ticket.IssueType,
+            Priority = ticket.Priority,
+            Space = ticket.Space,
+            Status = ticket.Status,
+            UpdatedDate = ticket.UpdatedDate,
+            ExecutionList = ticket.ExecutionList
                 .Select(el => new ExecutionListDto
                 {
-                    ticketId = el.TicketId,
-                    userId = el.UserId,
-                    userName = el.User.UserName
+                    TicketId = el.TicketId,
+                    UserId = el.UserId,
+                    UserName = el.User.UserName
                 })
                 .ToList(),
-            watchList = ticket.watchList
+            WatchList = ticket.WatchList
                 .Select(wl => new WatchListDto
                 {
-                    ticketId = wl.TicketId,
-                    userId = wl.UserId,
-                    userName = wl.User.UserName
+                    TicketId = wl.TicketId,
+                    UserId = wl.UserId,
+                    UserName = wl.User.UserName
                 })
                 .ToList(),
-            comments = ticket.comments
-                .OrderByDescending(c => c.id)
+            Comments = ticket.Comments
+                .OrderByDescending(c => c.Id)
                 .Select(comment => new TicketCommentDto
                 {
-                    id = comment.id,
-                    description = comment.description,
-                    createDate = comment.createDate,
-                    ticketId = comment.ticketId,
-                    creator = comment.creator,
-                    edited = comment.edited
+                    Id = comment.Id,
+                    Description = comment.Description,
+                    CreateDate = comment.CreateDate,
+                    TicketId = comment.TicketId,
+                    Creator = comment.Creator,
+                    Edited = comment.Edited
                 })
                 .ToList()
         });
@@ -83,7 +83,7 @@ public class TicketsService
     public async Task<Tuple<IEnumerable<TicketDto>, int>> GetPage(int page, int pageSize)
     {
         var tickets = _context.tickets
-            .OrderBy(item => item.id)
+            .OrderBy(item => item.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking();
@@ -97,7 +97,7 @@ public class TicketsService
         var tickets = _context.watchList
             .Where(i => i.UserId.Equals(userGuid)).Include(w => w.Ticket)
             .Select(t => t.Ticket)
-            .OrderBy(item => item.id)
+            .OrderBy(item => item.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking();
@@ -111,7 +111,7 @@ public class TicketsService
         var tickets = _context.executionList
             .Where(i => i.UserId.Equals(userGuid))
             .Select(t => t.Ticket)
-            .OrderBy(item => item.id)
+            .OrderBy(item => item.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking();
@@ -123,16 +123,16 @@ public class TicketsService
     public async Task<TicketDto> Add(TicketDto ticketDto)
     {
         Ticket ticket = _mapper.Map<Ticket>(ticketDto);
-        ApplicationUser? _creator = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.creatorId));
-        if (ticket == null || _creator == null)
+        ApplicationUser? creator = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.CreatorId));
+        if (ticket == null || creator == null)
             return null;
-        if (ticketDto.executorId != null && ticketDto.executorId != "")
+        if (ticketDto.ExecutorId != null && ticketDto.ExecutorId != "")
         {
-            ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.executorId));
+            ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.ExecutorId));
             if (_executor != null)
-                ticket.executor = _executor;
+                ticket.Executor = _executor;
         }
-        ticket.creator = _creator;
+        ticket.Creator = creator;
         await _context.tickets.AddAsync(ticket);
         await _context.SaveChangesAsync();
         var _itemDto = _mapper.Map<TicketDto>(ticket);
@@ -142,22 +142,22 @@ public class TicketsService
     public async Task<bool> Update(int id, TicketDto ticketDto)
     {
         var _ticket = await _context.tickets
-            .Include(i => i.executionList)
-            .Include(i => i.watchList)
-            .FirstOrDefaultAsync(o => o.id == id);
+            .Include(i => i.ExecutionList)
+            .Include(i => i.WatchList)
+            .FirstOrDefaultAsync(o => o.Id == id);
         if (_ticket == null)
             return false;
         var ticket = _mapper.Map<Ticket>(ticketDto);
-        ApplicationUser? _creator = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.creatorId));
-        if (ticket == null || _creator == null)
+        ApplicationUser? creator = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.CreatorId));
+        if (ticket == null || creator == null)
             return false;
-        if (ticketDto.executorId != null && ticketDto.executorId != "")
+        if (ticketDto.ExecutorId != null && ticketDto.ExecutorId != "")
         {
-            ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.executorId));
+            ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.ExecutorId));
             if (_executor != null)
-                ticket.executor = _executor;
+                ticket.Executor = _executor;
         }
-        ticket.creator = _creator;
+        ticket.Creator = creator;
         _mapper.Map(ticket, _ticket);
         await _context.SaveChangesAsync();
         return true;
@@ -165,7 +165,7 @@ public class TicketsService
 
     public async Task<bool> Remove(int id)
     {
-        var ticket = await _context.tickets.FirstOrDefaultAsync(o => o.id == id);
+        var ticket = await _context.tickets.FirstOrDefaultAsync(o => o.Id == id);
         _context.tickets.Remove(ticket);
         await _context.SaveChangesAsync();
         return true;
