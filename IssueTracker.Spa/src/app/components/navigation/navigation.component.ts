@@ -8,18 +8,29 @@ import { NotificationService } from '../../services/NotificationService';
 })
 export class NavigationComponent implements OnInit {
 
-  dis: string = "disabled"
-  notifications: string[] = [];
+  dis: string = "disabled";
+  frReq: string = "";
+  ticEx: string = "";
 
   constructor(private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     //JUST FOR FUN
     var myRole = localStorage.getItem('userRole')!;
-    if (myRole === "Admin") { this.dis = "" }
+    if (myRole === "Admin") {
+      this.dis = ""
+    }
 
     this.notificationService.notifications$.subscribe((notifications) => {
-      this.notifications = notifications;
+      if (notifications.length == 0) {
+        return;
+      } else if (notifications[0].includes("subscriber")) {
+        notifications.shift();
+        this.frReq = "🟣";
+      } else if (notifications[0].includes("ticket")) {
+        notifications.shift();
+        this.ticEx = "🟣";
+      }
     });
   }
 }

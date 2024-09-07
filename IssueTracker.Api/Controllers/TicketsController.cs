@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 using IssueTracker.Dal.Services;
 using IssueTracker.Dal.Models;
+using IssueTracker.Hubs;
 using AutoMapper;
 
 namespace IssueTracker.Controllers;
@@ -16,14 +18,17 @@ public class TicketsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly TicketsService _ticketsService;
+    private readonly IHubContext<ChatHub> _hubContext;
 
     public TicketsController(
         TicketsService ticketsService,
-        UsersService usersService,
-        IMapper mapper)
+        IMapper mapper,
+        IHubContext<ChatHub> hubContext
+        )
     {
         _mapper = mapper;
         _ticketsService = ticketsService;
+        _hubContext = hubContext;
     }
 
     [HttpGet]
@@ -88,18 +93,30 @@ public class TicketsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] TicketDto ticketDto)
     {
-        var itemDto = await _ticketsService.Add(ticketDto);
+        TicketDto itemDto = await _ticketsService.Add(ticketDto);
+        if(itemDto.ExecutorId != "")
+            _hubContext.Clients.User(itemDto.ExecutorId).SendAsync("ReceiveNotification", "you have new ticket");
+
         return Ok(itemDto);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] TicketDto ticketDto)
     {
-        var success = await _ticketsService.Update(id, ticketDto);
+        var tuple = await _ticketsService.Update(id, ticketDto);
+        var success = tuple.Item1;
         if (success)
+        {
+            string executorId = tuple.Item2;
+            if (executorId != "")
+                _hubContext.Clients.User(executorId).SendAsync("ReceiveNotification", "you have new ticket");
+
             return Ok();
+        }   
         else
+        {
             return BadRequest(ModelState);
+        }
     }
 
     [HttpDelete("{id}")]

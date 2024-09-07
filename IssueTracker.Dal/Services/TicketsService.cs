@@ -128,9 +128,9 @@ public class TicketsService
             return null;
         if (ticketDto.ExecutorId != null && ticketDto.ExecutorId != "")
         {
-            ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.ExecutorId));
-            if (_executor != null)
-                ticket.Executor = _executor;
+            ApplicationUser? executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.ExecutorId));
+            if (executor != null)
+                ticket.Executor = executor;
         }
         ticket.Creator = creator;
         await _context.tickets.AddAsync(ticket);
@@ -139,28 +139,37 @@ public class TicketsService
         return _itemDto;
     }
 
-    public async Task<bool> Update(int id, TicketDto ticketDto)
+    public async Task<Tuple<bool, string>> Update(int id, TicketDto ticketDto)
     {
-        var _ticket = await _context.tickets
+        Ticket _ticket = await _context.tickets
             .Include(i => i.ExecutionList)
             .Include(i => i.WatchList)
             .FirstOrDefaultAsync(o => o.Id == id);
         if (_ticket == null)
-            return false;
+            return new Tuple<bool, string>( false, "");
+        // checking if changed
+        string executorIdIfChanged = (
+            ticketDto.ExecutorId != null 
+            && ticketDto.ExecutorId != ""
+            && (_ticket.Executor is null || !ticketDto.ExecutorId.Equals(_ticket.Executor.Id.ToString()) )
+            )
+            ? ticketDto.ExecutorId
+            : "";
+
         var ticket = _mapper.Map<Ticket>(ticketDto);
         ApplicationUser? creator = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.CreatorId));
         if (ticket == null || creator == null)
-            return false;
+            return new Tuple<bool, string>( false, "");
         if (ticketDto.ExecutorId != null && ticketDto.ExecutorId != "")
         {
-            ApplicationUser? _executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.ExecutorId));
-            if (_executor != null)
-                ticket.Executor = _executor;
+            ApplicationUser? executor = await _context.Users.FirstOrDefaultAsync(u => u.Id == new Guid(ticketDto.ExecutorId));
+            if (executor != null)
+                ticket.Executor = executor;
         }
         ticket.Creator = creator;
         _mapper.Map(ticket, _ticket);
         await _context.SaveChangesAsync();
-        return true;
+        return new Tuple<bool, string>(true, executorIdIfChanged);
     }
 
     public async Task<bool> Remove(int id)

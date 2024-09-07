@@ -19,7 +19,8 @@
       <a 
       class="list-group-item"
       [routerLink]="['riend-requests']" 
-      routerLinkActive="active">Friend requests - {{notifications.length}}</a>
+      (click)="frReq = '';"
+      routerLinkActive="active">Friend requests {{frReq}}</a>
 
       <a 
       class="list-group-item"
@@ -36,7 +37,7 @@
       [routerLink]="['weather']" 
       routerLinkActive="active">Weather</a>
 
-      <a 
+      <a
       class="list-group-item {{dis}}"
       [routerLink]="['tickets']" 
       routerLinkActive="active">Tickets</a>
@@ -48,7 +49,8 @@
 
       <a 
       class="list-group-item"
-      [routerLink]="['tickets-executing']" 
-      routerLinkActive="active">Tickets executing</a>
+      [routerLink]="['tickets-executing']"
+      (click)="ticEx = '';"
+      routerLinkActive="active">Tickets executing {{ticEx}}</a>
 
 </div>

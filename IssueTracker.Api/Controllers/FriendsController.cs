@@ -68,13 +68,16 @@ public class FriendsController : ControllerBase
     [HttpPost("subscribe")]
     public async Task<IActionResult> Subscribe(Guid userGuid, [FromBody] IID friendid)
     {
-        _hubContext.Clients.User(friendid.id).SendAsync("ReceiveNotification", "you have new subscriber");
-
         var success = await _subscriptionsService.Subscribe(userGuid, new Guid(friendid.id));
         if (success)
+        {
+            _hubContext.Clients.User(friendid.id).SendAsync("ReceiveNotification", "you have new subscriber");
             return Ok("OK");
+        }
         else
+        {
             return BadRequest(ModelState);
+        }
     }
 
     [HttpPost("unsubscribe")]
