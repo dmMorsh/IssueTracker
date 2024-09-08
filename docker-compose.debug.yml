@@ -1,0 +1,16 @@
+# version: '3.4'
+services:
+  issuetracker:
+    image: issuetracker
+    build:
+      context: .
+      dockerfile: IssueTracker.Api/Dockerfile
+      args:
+        - configuration=Debug
+    ports:
+      - 5237:5237
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Port=5432;User Id=admin;Password=root;Database=IssueTracker;
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw

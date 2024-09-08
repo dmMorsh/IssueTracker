@@ -144,6 +144,7 @@ public class TicketsService
         Ticket _ticket = await _context.tickets
             .Include(i => i.ExecutionList)
             .Include(i => i.WatchList)
+            .Include(i => i.Executor)
             .FirstOrDefaultAsync(o => o.Id == id);
         if (_ticket == null)
             return new Tuple<bool, string>( false, "");

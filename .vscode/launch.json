@@ -11,6 +11,15 @@
   ],
   "configurations": [
     {
+      "name": "Dock .NET Core Attach",
+      "type": "docker",
+      "request": "attach",
+      "platform": "netCore",
+      "sourceFileMap": {
+        "/src": "${workspaceFolder}"
+      }
+    },
+    {
       "name": "Launch ASP.NET Core API",
       "type": "coreclr",
       "request": "launch",
@@ -19,10 +28,6 @@
       "args": [],
       "cwd": "${workspaceFolder}/IssueTracker.Api",
       "stopAtEntry": false,
-      // "serverReadyAction": {
-      //   "action": "openExternally",
-      //   "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-      // },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -37,6 +42,15 @@
       "url": "http://localhost:4200",
       "webRoot": "${workspaceFolder}/IssueTracker.Spa",
       "preLaunchTask": "npm: start --prefix IssueTracker.Spa"
+    },
+    {
+      "name": "Docker .NET Launch",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "netCore": {
+        "appProject": "${workspaceFolder}/IssueTracker.Api/IssueTracker.csproj"
+      }
     }
   ]
 }

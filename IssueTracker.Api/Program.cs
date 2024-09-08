@@ -71,7 +71,7 @@ builder.Services.
     {
         options.AddPolicy(MyAllowSpecificOrigins,
             builder => builder
-                .WithOrigins(frontUrl!) // address Angular app
+                .WithOrigins(frontUrl!, "http://host.docker.internal:4200") // address Angular app
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
