@@ -10,7 +10,6 @@ using IssueTracker.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 //EF & Identity
 string? connString = builder.Configuration.GetConnectionString("PostgresConnection");
 builder.Services

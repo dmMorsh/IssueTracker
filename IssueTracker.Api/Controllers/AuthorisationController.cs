@@ -14,7 +14,6 @@ public class LoginDto
 {
     public required string Login { get; set; }
     public required string Password { get; set; }
-
 }
 
 [ApiController]
@@ -131,7 +130,6 @@ public class AuthorisationController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
-
         var principal = GetPrincipalFromExpiredToken(refreshTokenRequest.accessToken);
         var username = principal.Identity.Name; // Получаем имя пользователя из токена
 
