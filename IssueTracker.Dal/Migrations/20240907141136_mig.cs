@@ -11,8 +11,8 @@ namespace IssueTracker.Dal.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ApplicationUserChatEntity_chats_Chatsid",
-                table: "ApplicationUserChatEntity");
+                name: "FK_ApplicationUserChat_chats_Chatsid",
+                table: "ApplicationUserChat");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_comments_tickets_ticketId",
@@ -192,12 +192,12 @@ namespace IssueTracker.Dal.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "Chatsid",
-                table: "ApplicationUserChatEntity",
+                table: "ApplicationUserChat",
                 newName: "ChatsId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserChatEntity_chats_ChatsId",
-                table: "ApplicationUserChatEntity",
+                name: "FK_ApplicationUserChat_chats_ChatsId",
+                table: "ApplicationUserChat",
                 column: "ChatsId",
                 principalTable: "chats",
                 principalColumn: "Id",
@@ -238,8 +238,8 @@ namespace IssueTracker.Dal.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ApplicationUserChatEntity_chats_ChatsId",
-                table: "ApplicationUserChatEntity");
+                name: "FK_ApplicationUserChat_chats_ChatsId",
+                table: "ApplicationUserChat");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_comments_tickets_TicketId",
@@ -419,12 +419,12 @@ namespace IssueTracker.Dal.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "ChatsId",
-                table: "ApplicationUserChatEntity",
+                table: "ApplicationUserChat",
                 newName: "Chatsid");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserChatEntity_chats_Chatsid",
-                table: "ApplicationUserChatEntity",
+                name: "FK_ApplicationUserChat_chats_Chatsid",
+                table: "ApplicationUserChat",
                 column: "Chatsid",
                 principalTable: "chats",
                 principalColumn: "id",

@@ -6,7 +6,7 @@ import { IUser } from '../types/user.interface';
 
 @Injectable({ providedIn: 'root' })
 
-export class ChatsService {
+export class ChatService {
     private apiUrl: string;
     constructor(private http: HttpClient) {
         this.apiUrl = `${API_URL}`;

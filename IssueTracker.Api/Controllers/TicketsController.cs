@@ -1,12 +1,13 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
-using IssueTracker.Dal.Services;
-using IssueTracker.Dal.Models;
-using IssueTracker.Hubs;
-using AutoMapper;
+using IssueTracker.Application.Services;
+using IssueTracker.Domain.Models;
+using IssueTracker.Api.Hubs;
+using IssueTracker.Api.DTOs;
 
 namespace IssueTracker.Controllers;
 
@@ -17,24 +18,24 @@ namespace IssueTracker.Controllers;
 public class TicketsController : ControllerBase
 {
     private readonly IMapper _mapper;
-    private readonly TicketsService _ticketsService;
+    private readonly TicketService _ticketService;
     private readonly IHubContext<ChatHub> _hubContext;
 
     public TicketsController(
-        TicketsService ticketsService,
         IMapper mapper,
+        TicketService ticketService,
         IHubContext<ChatHub> hubContext
         )
     {
         _mapper = mapper;
-        _ticketsService = ticketsService;
+        _ticketService = ticketService;
         _hubContext = hubContext;
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var items = await _ticketsService.GetAll();
+        var items = await _ticketService.GetAllAsync();
         var ticketsDto = _mapper.Map<IEnumerable<Ticket>, IEnumerable<TicketDto>>(items);
         return Ok(ticketsDto);
     }
@@ -42,74 +43,79 @@ public class TicketsController : ControllerBase
     [HttpGet("page")]
     public async Task<IActionResult> GetPage([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var tuple = await _ticketsService.GetPage(page, pageSize);
-        var items = tuple.Item1;
-        int totalCount = tuple.Item2;
+        var tickets = await _ticketService.GetPage(page, pageSize);
+        var ticketsDto = _mapper.Map<IEnumerable<Ticket>, IEnumerable<TicketDto>>(tickets);
+
+        int totalCount = await _ticketService.GetPageCount();
         int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        if (items.Count() == 0)
+        if (tickets.Count() == 0)
             totalPages = 1;
 
         return Ok(new
         {
             totalPages = totalPages,
-            tickets = items
+            tickets = ticketsDto
         });
     }
 
     [HttpGet("watching/page")]
     public async Task<IActionResult> GetWatchingPage(Guid userGuid, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var tuple = await _ticketsService.GetWatchingPage(userGuid, page, pageSize);
-        var items = tuple.Item1;
-        int totalCount = tuple.Item2;
+        var tickets = await _ticketService.GetWatchingPage(userGuid, page, pageSize);
+        var ticketsDto = _mapper.Map<IEnumerable<Ticket>, IEnumerable<TicketDto>>(tickets);
+
+        int totalCount = await _ticketService.GetWatchingPageCount(userGuid);
         int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        if (items.Count() == 0)
+        if (tickets.Count() == 0)
             totalPages = 1;
 
         return Ok(new
         {
             totalPages = totalPages,
-            tickets = items
+            tickets = ticketsDto
         });
     }
 
     [HttpGet("executing/page")]
     public async Task<IActionResult> GetExecutingPage(Guid userGuid, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var tuple = await _ticketsService.GetExecutingPage(userGuid, page, pageSize);
-        var items = tuple.Item1;
-        int totalCount = tuple.Item2;
+        var tickets = await _ticketService.GetExecutingPage(userGuid, page, pageSize);
+        var ticketsDto = _mapper.Map<IEnumerable<Ticket>, IEnumerable<TicketDto>>(tickets);
+
+        int totalCount = await _ticketService.GetExecutingPageCount(userGuid);
         int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        if (items.Count() == 0)
+        if (tickets.Count() == 0)
             totalPages = 1;
 
         return Ok(new
         {
             totalPages = totalPages,
-            tickets = items
+            tickets = ticketsDto
         });
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] TicketDto ticketDto)
     {
-        TicketDto itemDto = await _ticketsService.Add(ticketDto);
-        if(itemDto.ExecutorId != "")
-            _hubContext.Clients.User(itemDto.ExecutorId).SendAsync("ReceiveNotification", "you have new ticket");
+        var ticket = _mapper.Map<TicketDto, Ticket>(ticketDto);
+        var ticketResult = await _ticketService.AddAsync(ticket);
+        if(!ticket.ExecutorId.Equals(Guid.Empty))
+            _hubContext.Clients.User(ticket.ExecutorId.ToString()).SendAsync("ReceiveNotification", "you have new ticket");
 
-        return Ok(itemDto);
+        var ticketDtoResult = _mapper.Map<TicketDto>(ticket);
+        return Ok(ticketDtoResult);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] TicketDto ticketDto)
     {
-        var tuple = await _ticketsService.Update(id, ticketDto);
-        var success = tuple.Item1;
+        var oldExecutorId = await _ticketService.GetExecutorIdByTicketId(id);
+        var ticket = _mapper.Map<TicketDto, Ticket>(ticketDto);
+        var success = await _ticketService.UpdateAsync(id, ticket);
         if (success)
         {
-            string executorId = tuple.Item2;
-            if (executorId != "")
-                _hubContext.Clients.User(executorId).SendAsync("ReceiveNotification", "you have new ticket");
+            if (ticket.ExecutorId != null && !ticket.ExecutorId.Equals(Guid.Empty) && !ticket.ExecutorId.Equals(oldExecutorId))
+                _hubContext.Clients.User(ticket.ExecutorId.ToString()).SendAsync("ReceiveNotification", "you have new ticket");
 
             return Ok();
         }   
@@ -122,7 +128,7 @@ public class TicketsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var success = await _ticketsService.Remove(id);
+        var success = await _ticketService.DeleteAsync(id);
         if (success)
             return Ok();
         else

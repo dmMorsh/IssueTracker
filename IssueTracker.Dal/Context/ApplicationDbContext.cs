@@ -14,7 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     public DbSet<Ticket> tickets { get; set; }
     public DbSet<TicketComment> comments { get; set; }
-    public DbSet<ChatEntity> chats { get; set; }
+    public DbSet<Chat> chats { get; set; }
     public DbSet<UserMessage> messages { get; set; }
     public DbSet<Space> spaces { get; set; }
     public DbSet<WatchList> watchList { get; set; }

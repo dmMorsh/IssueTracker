@@ -4,7 +4,7 @@ namespace IssueTracker.Dal.Models;
 
 public partial class ApplicationUser : IdentityUser<Guid>
 {
-    public ICollection<ChatEntity>? Chats { get; set; }
+    public ICollection<Chat>? Chats { get; set; }
 
     public ICollection<ApplicationUser>? Friends { get; set; }
 

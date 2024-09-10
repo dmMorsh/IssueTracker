@@ -275,7 +275,7 @@ namespace IssueTracker.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApplicationUserChatEntity",
+                name: "ApplicationUserChat",
                 columns: table => new
                 {
                     Chatsid = table.Column<int>(type: "integer", nullable: false),
@@ -283,15 +283,15 @@ namespace IssueTracker.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUserChatEntity", x => new { x.Chatsid, x.UsersId });
+                    table.PrimaryKey("PK_ApplicationUserChat", x => new { x.Chatsid, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUserChatEntity_AspNetUsers_UsersId",
+                        name: "FK_ApplicationUserChat_AspNetUsers_UsersId",
                         column: x => x.UsersId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicationUserChatEntity_chats_Chatsid",
+                        name: "FK_ApplicationUserChat_chats_Chatsid",
                         column: x => x.Chatsid,
                         principalTable: "chats",
                         principalColumn: "id",
@@ -409,8 +409,8 @@ namespace IssueTracker.Dal.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserChatEntity_UsersId",
-                table: "ApplicationUserChatEntity",
+                name: "IX_ApplicationUserChat_UsersId",
+                table: "ApplicationUserChat",
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
@@ -500,7 +500,7 @@ namespace IssueTracker.Dal.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUserChatEntity");
+                name: "ApplicationUserChat");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

@@ -5,7 +5,7 @@ import { SignalRService } from '../../services/signalR.service';
 import { Message } from '../../models/message.model';
 import { MessagesService } from '../../services/messages.service';
 import { IUser } from '../../types/user.interface';
-import { ChatsService } from '../../services/chats.service';
+import { ChatService } from '../../services/chats.service';
 
 @Component({
   selector: 'app-personal-chat',
@@ -32,7 +32,7 @@ export class PersonalChatComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
     private readonly signalRService: SignalRService,
     private msgService: MessagesService,
-    private chtService: ChatsService,
+    private chtService: ChatService,
     private router: Router) { }
 
   ngOnInit() {

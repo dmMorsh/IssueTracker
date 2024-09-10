@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using IssueTracker.Dal.Services;
-using IssueTracker.Dal.Models;
-using IssueTracker.Hubs;
+using IssueTracker.Application.Services;
+using IssueTracker.Domain.Models;
+using IssueTracker.Api.Hubs;
 
 namespace IssueTracker.Controllers;
 
@@ -19,17 +19,17 @@ public class IID
 [Route("api/[controller]")]
 public class FriendsController : ControllerBase
 {
-    private readonly FriendsService _friendsService;
-    private readonly FriendsSubscriptionsService _subscriptionsService;
+    private readonly FriendService _friendService;
+    private readonly FriendSubscriptionService _subscriptionsService;
     private readonly IHubContext<ChatHub> _hubContext;
 
     public FriendsController(
-        FriendsService friendsService,
-        FriendsSubscriptionsService subscriptionsService,
+        FriendService friendService,
+        FriendSubscriptionService subscriptionsService,
         IHubContext<ChatHub> hubContext
         )
     {
-        _friendsService = friendsService;
+        _friendService = friendService;
         _subscriptionsService = subscriptionsService;
         _hubContext = hubContext;
     }
@@ -37,14 +37,14 @@ public class FriendsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get(Guid userGuid)
     {
-        IEnumerable<MiniUser> friends = await _friendsService.GetAll(userGuid);
+        IEnumerable<MiniUser> friends = await _friendService.GetAllByUserId(userGuid);
         return Ok(friends);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(Guid userGuid, [FromBody] IID friendid)
     {
-        var success = await _friendsService.Add(userGuid, new Guid(friendid.id));
+        var success = await _friendService.AddAsync(userGuid, new Guid(friendid.id));
         if (success)
             return Ok("OK");
         else

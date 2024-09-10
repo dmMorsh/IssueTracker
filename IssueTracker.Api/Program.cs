@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using IssueTracker.Dal.Context;
-using IssueTracker.Dal.Models;
-using IssueTracker.Dal.Services;
-using IssueTracker.Hubs;
+using IssueTracker.Infrastructure.Context;
+using IssueTracker.Infrastructure.Repositories;
+using IssueTracker.Domain.Interfaces;
+using IssueTracker.Domain.Models;
+using IssueTracker.Application.Services;
+using IssueTracker.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,16 +68,16 @@ if (!string.IsNullOrEmpty(frontUrl))
     frontUrl = "http://localhost:4200";
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-builder.Services.
-    AddCors(options =>
-    {
-        options.AddPolicy(MyAllowSpecificOrigins,
-            builder => builder
-                .WithOrigins(frontUrl!, "http://host.docker.internal:4200") // address Angular app
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
-    });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+        builder => builder
+            // .SetIsOriginAllowed(_ => true) // Разрешить все источники
+            .WithOrigins(frontUrl!, "http://host.docker.internal:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+});
 
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
@@ -85,11 +87,27 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 //to add id of user where requared
 builder.Services.AddScoped<UserGuidFilter>();
-//to add services from dal
-var appServices = typeof(UsersService).Assembly.GetTypes()
+
+//to add services from .Infrastructure
+var repositories = typeof(ChatRepository).Assembly.GetTypes()
+    .Where(r => r.Name.EndsWith("Repository") && r.IsInterface == false)
+    .ToList();
+foreach (var repository in repositories)
+{
+    var interfaceType = repository.GetInterfaces().FirstOrDefault(i => i.Name == $"I{repository.Name}");
+    if (interfaceType != null)
+    {
+        builder.Services.AddScoped(interfaceType, repository);
+    }
+}
+
+// //to add services from .Application
+var appServices = typeof(UserService).Assembly.GetTypes()
     .Where(s => s.Name.EndsWith("Service") && s.IsInterface == false).ToList();
 foreach (var appService in appServices)
     builder.Services.Add(new ServiceDescriptor(appService, appService, ServiceLifetime.Scoped));
+
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
 
 var app = builder.Build();
 

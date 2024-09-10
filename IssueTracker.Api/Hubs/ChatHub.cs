@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.SignalR;
-using IssueTracker.Dal.Services;
-using IssueTracker.Dal.Models;
+using IssueTracker.Application.Services;
+using IssueTracker.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace IssueTracker.Hubs;
+namespace IssueTracker.Api.Hubs;
 
 [Authorize]
 public class ChatHub : Hub
 {
-    public readonly MessagesService _messagesService;
+    public readonly MessageService _messageService;
 
-    public ChatHub(MessagesService messagesService)
+    public ChatHub(MessageService messageService)
     {
-        _messagesService = messagesService;
+        _messageService = messageService;
     }
 
     public async Task SendMessage(UserMessage m)
@@ -25,7 +25,7 @@ public class ChatHub : Hub
             Message = m.Message,
             DateSent = m.DateSent
         };
-        var success = await _messagesService.Add(returnMessage);
+        var success = await _messageService.AddAsync(returnMessage);
         if (success)
             await Clients.Group(m.ChatId.ToString()).SendAsync("ReceiveMessage", returnMessage);
     }

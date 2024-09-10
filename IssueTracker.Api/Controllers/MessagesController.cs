@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IssueTracker.Dal.Services;
-using IssueTracker.Dal.Models;
+using IssueTracker.Application.Services;
+using IssueTracker.Domain.Models;
 
 namespace IssueTracker.Controllers;
 
@@ -12,24 +12,24 @@ namespace IssueTracker.Controllers;
 [Route("api/[controller]")]
 public class MessagesController : ControllerBase
 {
-    private readonly MessagesService _messagesService;
+    private readonly MessageService _messageService;
 
-    public MessagesController(MessagesService messagesService)
+    public MessagesController(MessageService messageService)
     {
-        _messagesService = messagesService;
+        _messageService = messageService;
     }
 
     [HttpGet("getById")]
-    public async Task<IActionResult> getById([FromQuery] int id)
+    public async Task<IActionResult> GetById([FromQuery] int id)
     {
-        var messages = await _messagesService.getById(id);
+        var messages = await _messageService.GetAllByChatIdAsync(id);
         return Ok(messages);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] UserMessage item)
     {
-        var success = await _messagesService.Add(item);
+        var success = await _messageService.AddAsync(item);
         if (success)
             return Ok(item);
         else
@@ -39,7 +39,7 @@ public class MessagesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UserMessage item)
     {
-        var success = await _messagesService.Update(id, item);
+        var success = await _messageService.UpdateAsync(item);
         if (success)
             return Ok();
         else
@@ -49,7 +49,7 @@ public class MessagesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var success = await _messagesService.Remove(id);
+        var success = await _messageService.DeleteAsync(id);
         if (success)
             return Ok();
         else

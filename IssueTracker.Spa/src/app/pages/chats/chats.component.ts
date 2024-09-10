@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IChat } from '../../models/ichats.model';
 import { Router } from '@angular/router';
-import { ChatsService } from '../../services/chats.service';
+import { ChatService } from '../../services/chats.service';
 
 @Component({
   selector: 'app-chats',
@@ -13,7 +13,7 @@ export class ChatsComponent implements OnInit {
   userId: string = "00000000-0000-0000-0000-000000000000";
   chats: IChat[] = [];
 
-  constructor(private cService: ChatsService, private router: Router) { }
+  constructor(private cService: ChatService, private router: Router) { }
 
   ngOnInit(): void {
     this.userId = localStorage.getItem('userId')!;

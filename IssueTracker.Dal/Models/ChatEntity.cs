@@ -1,5 +1,5 @@
 namespace IssueTracker.Dal.Models;
-public class ChatEntity
+public class Chat
 {
     public int Id { get; set; }
     public ICollection<ApplicationUser>? Users { get; set; }

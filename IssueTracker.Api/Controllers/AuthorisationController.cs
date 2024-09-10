@@ -6,15 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using IssueTracker.Dal.Models;
+using IssueTracker.Domain.Models;
+using IssueTracker.Api.DTOs;
 
 namespace IssueTracker.Controllers;
 
-public class LoginDto
-{
-    public required string Login { get; set; }
-    public required string Password { get; set; }
-}
+
 
 [ApiController]
 [Route("api/[controller]")]

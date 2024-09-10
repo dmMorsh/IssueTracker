@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IssueTracker.Dal\IssueTracker.Dal.csproj" />
+    <ProjectReference Include="..\IssueTracker.Infrastructure\IssueTracker.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

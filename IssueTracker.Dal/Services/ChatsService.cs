@@ -4,10 +4,10 @@ using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Dal.Services;
 
-public class ChatsService
+public class ChatService
 {
     private readonly ApplicationDbContext _context;
-    public ChatsService(ApplicationDbContext context)
+    public ChatService(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -57,7 +57,7 @@ public class ChatsService
 
             if (per1 != null && per2 != null)
             {
-                var newChat = new ChatEntity
+                var newChat = new Chat
                 {
                     IsPersonal = true,
                     Users = new ApplicationUser[] { per1, per2 }
@@ -81,9 +81,9 @@ public class ChatsService
         return users;
     }
 
-    public async Task<bool> Add(ChatEntity chatEntity)
+    public async Task<bool> Add(Chat Chat)
     {
-        await _context.chats.AddAsync(chatEntity);
+        await _context.chats.AddAsync(Chat);
         await _context.SaveChangesAsync();
         return true;
     }

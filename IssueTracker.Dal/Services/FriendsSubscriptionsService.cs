@@ -4,11 +4,11 @@ using IssueTracker.Dal.Models;
 
 namespace IssueTracker.Dal.Services;
 
-public class FriendsSubscriptionsService
+public class FriendSubscriptionService
 {
     private readonly ApplicationDbContext _context;
 
-    public FriendsSubscriptionsService(ApplicationDbContext context)
+    public FriendSubscriptionService(ApplicationDbContext context)
     {
         _context = context;
     }

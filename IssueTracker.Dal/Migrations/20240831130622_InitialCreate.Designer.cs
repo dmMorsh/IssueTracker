@@ -25,7 +25,7 @@ namespace IssueTracker.Dal.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ApplicationUserChatEntity", b =>
+            modelBuilder.Entity("ApplicationUserChat", b =>
                 {
                     b.Property<int>("Chatsid")
                         .HasColumnType("integer");
@@ -37,7 +37,7 @@ namespace IssueTracker.Dal.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ApplicationUserChatEntity");
+                    b.ToTable("ApplicationUserChat");
                 });
 
             modelBuilder.Entity("IssueTracker.Models.ApplicationRole", b =>
@@ -138,7 +138,7 @@ namespace IssueTracker.Dal.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("IssueTracker.Models.ChatEntity", b =>
+            modelBuilder.Entity("IssueTracker.Models.Chat", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -464,9 +464,9 @@ namespace IssueTracker.Dal.Migrations
                     b.ToTable("UserSubscriptions", (string)null);
                 });
 
-            modelBuilder.Entity("ApplicationUserChatEntity", b =>
+            modelBuilder.Entity("ApplicationUserChat", b =>
                 {
-                    b.HasOne("IssueTracker.Models.ChatEntity", null)
+                    b.HasOne("IssueTracker.Models.Chat", null)
                         .WithMany()
                         .HasForeignKey("Chatsid")
                         .OnDelete(DeleteBehavior.Cascade)

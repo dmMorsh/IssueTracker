@@ -1,9 +1,11 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IssueTracker.Dal.Services;
-using IssueTracker.Dal.Models;
+using IssueTracker.Application.Services;
+using IssueTracker.Domain.Models;
+using IssueTracker.Api.DTOs;
 
 namespace IssueTracker.Controllers;
 
@@ -12,34 +14,35 @@ namespace IssueTracker.Controllers;
 [Route("api/[controller]")]
 public class CommentsController : ControllerBase
 {
-    private readonly CommentsService _commentsService;
+    private readonly IMapper _mapper;
+    private readonly CommentService _commentService;
 
-    public CommentsController(CommentsService commentsService)
+    public CommentsController(
+        IMapper mapper,
+        CommentService commentService
+        )
     {
-        _commentsService = commentsService;
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Get()
-    {
-        var ticketCommentDto = await _commentsService.GetAll();
-        return Ok(ticketCommentDto);
+        _mapper = mapper;
+        _commentService = commentService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] TicketCommentDto itemDto)
+    public async Task<IActionResult> Create([FromBody] TicketCommentDto commentDto)
     {
-        var _itemDto = await _commentsService.Add(itemDto);
-        if (_itemDto != null)
-            return Ok(_itemDto);
-        else
+        var comment = _mapper.Map<TicketComment>(commentDto);
+        var commentResult = await _commentService.AddAsync(comment);
+        if (commentResult == null)
             return BadRequest(ModelState);
+
+        var commentDtoResult = _mapper.Map<TicketCommentDto>(commentDto);
+        return Ok(commentDtoResult);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] TicketCommentDto itemDto)
+    public async Task<IActionResult> Update(int id, [FromBody] TicketCommentDto commentDto)
     {
-        var success = await _commentsService.Update(id, itemDto);
+        var comment = _mapper.Map<TicketComment>(commentDto);
+        var success = await _commentService.UpdateAsync(id, comment);
         if (success)
             return Ok();
         else
@@ -49,7 +52,7 @@ public class CommentsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var success = await _commentsService.Remove(id);
+        var success = await _commentService.DeleteAsync(id);
         if (success)
             return Ok();
         else

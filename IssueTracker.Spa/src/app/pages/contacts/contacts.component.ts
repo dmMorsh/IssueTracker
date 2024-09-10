@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { IUser } from '../../types/user.interface';
 import { Router } from '@angular/router';
-import { ChatsService } from '../../services/chats.service';
+import { ChatService } from '../../services/chats.service';
 
 @Component({
   selector: 'app-contacts',
@@ -16,7 +16,7 @@ export class ContactsComponent implements OnInit {
   users: IUser[] = [];//{id, username}
   chatId = 0;
 
-  constructor(private uService: UsersService, private cService: ChatsService, private router: Router) { }
+  constructor(private uService: UsersService, private cService: ChatService, private router: Router) { }
 
   ngOnInit() {
     this.userId = localStorage.getItem('userId')!;

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using IssueTracker.Dal.Services;
-using IssueTracker.Dal.Models;
+using IssueTracker.Application.Services;
+using IssueTracker.Domain.Models;
 
 namespace IssueTracker.Controllers;
 
@@ -12,23 +12,23 @@ namespace IssueTracker.Controllers;
 [Route("api/[controller]")]
 public class ChatsController : ControllerBase
 {
-    private readonly ChatsService _chatsService;
-    public ChatsController(ChatsService chatsService)
+    private readonly ChatService _chatService;
+    public ChatsController(ChatService chatService)
     {
-        _chatsService = chatsService;
+        _chatService = chatService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(Guid userGuid)
+    public async Task<IActionResult> GetByUserId(Guid userGuid)
     {
-        var items = await _chatsService.Get(userGuid);
+        var items = await _chatService.GetByUserId(userGuid);
         return Ok(items);
     }
 
     [HttpGet("getChatId")]
-    public async Task<IActionResult> getChatId(Guid userGuid, [FromQuery] Guid userId)
+    public async Task<IActionResult> GetChatId(Guid userGuid, [FromQuery] Guid userId)
     {
-        var chatId = await _chatsService.getPersonalChatId(userGuid, userId);
+        var chatId = await _chatService.GetPersonalChatId(userGuid, userId);
         if (chatId != null)
             return Ok(chatId);
         else
@@ -36,9 +36,9 @@ public class ChatsController : ControllerBase
     }
 
     [HttpGet("getGuysById")]
-    public async Task<IActionResult> getGuysById([FromQuery] int id)
+    public async Task<IActionResult> GetGuysByChatId([FromQuery] int id)
     {
-        var guys = await _chatsService.getGuysById(id);
+        var guys = await _chatService.GetGuysByChatId(id);
         if (guys != null)
             return Ok(guys);
         else
@@ -46,9 +46,9 @@ public class ChatsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ChatEntity item)
+    public async Task<IActionResult> Create([FromBody] Chat item)
     {
-        var success = await _chatsService.Add(item);
+        var success = await _chatService.AddAsync(item);
         if (success)
             return Ok(item);
         else
@@ -58,7 +58,7 @@ public class ChatsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var success = await _chatsService.Remove(id);
+        var success = await _chatService.DeleteAsync(id);
         if (success)
             return Ok();
         else
